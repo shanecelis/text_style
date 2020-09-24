@@ -1,0 +1,46 @@
+# Copyright (C) 2020 Robin Krahl <robin.krahl@ireas.org>
+# SPDX-License-Identifier: CC0-1.0
+image: archlinux
+packages:
+  - gnupg
+  - reuse
+  - rustup
+sources:
+  - https://git.sr.ht/~ireas/text-style-rs
+tasks:
+  - setup: |
+      rustup set profile minimal
+      rustup default stable
+      rustup component add rustfmt
+      rustup component add clippy
+  - version: |
+      rustc -V
+  - verify: |
+      cd text-style-rs
+      curl -s "https://pgp.ireas.org/0x6D533958F070C57C.txt" | gpg --import
+      git verify-commit HEAD || [ `git config user.email` == "builds@sr.ht" ]
+  - reuse: |
+      cd text-style-rs
+      reuse lint
+  - build: |
+      cd text-style-rs
+      cargo build --release
+      cargo build --release --features ansi_term
+      cargo build --release --features crossterm
+      cargo build --release --features cursive
+      cargo build --release --features syntect
+      cargo build --release --features termion
+      cargo build --release --all-features
+  - test: |
+      cd text-style-rs
+      cargo test --all-features
+  - clippy: |
+      cd text-style-rs
+      cargo clippy --all-features -- -D warnings
+  - format: |
+      cd text-style-rs
+      cargo fmt -- --check
+triggers:
+  - action: email
+    condition: failure
+    to: robin.krahl@ireas.org

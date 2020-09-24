@@ -1,0 +1,23 @@
+# Copyright (C) 2020 Robin Krahl <robin.krahl@ireas.org>
+# SPDX-License-Identifier: CC0-1.0
+image: archlinux
+packages:
+  - rustup
+sources:
+  - https://git.sr.ht/~ireas/text-style-rs
+tasks:
+  - setup: |
+      rustup set profile minimal
+      rustup default 1.40.0
+  - version: |
+      rustc -V
+  - build: |
+      cd text-style-rs
+      cargo build --release --all-features
+  - test: |
+      cd text-style-rs
+      cargo test --all-features
+triggers:
+  - action: email
+    condition: failure
+    to: robin.krahl@ireas.org

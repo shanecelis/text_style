@@ -1,0 +1,52 @@
+# SPDX-FileCopyrightText: 2020 Robin Krahl <robin.krahl@ireas.org>
+# SPDX-License-Identifier: CC0-1.0
+
+[package]
+name = "text-style"
+version = "0.1.0"
+authors = ["Robin Krahl <robin.krahl@ireas.org>"]
+edition = "2018"
+description = "Types and conversions for styled text"
+homepage = "https://sr.ht/~ireas/text-style-rs"
+repository = "https://git.sr.ht/~ireas/text-style-rs"
+documentation = "https://docs.rs/text_style"
+keywords = ["text", "style", "conversion"]
+categories = ["data-structures"]
+license = "Apache-2.0 OR MIT"
+exclude = [".builds/*"]
+readme = "README.md"
+
+[dependencies]
+enumset = "1"
+
+[dependencies.ansi_term]
+version = "0.12"
+optional = true
+
+[dependencies.crossterm]
+version = "0.17"
+optional = true
+
+[dependencies.cursive]
+version = "0.15"
+optional = true
+default-features = false
+
+[dependencies.termion]
+version = "1"
+optional = true
+
+[dependencies.syntect]
+version = "4"
+optional = true
+
+[dev-dependencies]
+anyhow = "1"
+argh = "0.1.3"
+
+[dev-dependencies.cursive]
+version = "0.15"
+features = ["crossterm-backend"]
+
+[package.metadata.docs.rs]
+all-features = true
