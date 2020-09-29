@@ -262,21 +262,13 @@ impl<'a> StyledStr<'a> {
 
     /// Sets the foreground color for this styled string.
     pub fn with(mut self, fg: Color) -> Self {
-        if let Some(style) = self.style.as_mut() {
-            style.fg = Some(fg);
-        } else {
-            self.style = Some(Style::fg(fg));
-        }
+        self.style_mut().fg = Some(fg);
         self
     }
 
     /// Sets the background color for this styled string.
     pub fn on(mut self, bg: Color) -> Self {
-        if let Some(style) = self.style.as_mut() {
-            style.bg = Some(bg);
-        } else {
-            self.style = Some(Style::bg(bg));
-        }
+        self.style_mut().bg = Some(bg);
         self
     }
 
@@ -297,12 +289,14 @@ impl<'a> StyledStr<'a> {
 
     /// Sets the given effect for this styled string.
     pub fn effect(mut self, effect: Effect) -> Self {
-        if let Some(style) = self.style.as_mut() {
-            style.effects.insert(effect);
-        } else {
-            self.style = Some(Style::effect(effect));
-        }
+        self.style_mut().effects.insert(effect);
         self
+    }
+
+    /// Returns a mutable reference to the style of this string, creating a new style with the
+    /// default settings if the style is currently `None`.
+    pub fn style_mut(&mut self) -> &mut Style {
+        self.style.get_or_insert_with(Default::default)
     }
 }
 
@@ -324,21 +318,13 @@ impl StyledString {
 
     /// Sets the foreground color for this styled string.
     pub fn with(mut self, fg: Color) -> Self {
-        if let Some(style) = self.style.as_mut() {
-            style.fg = Some(fg);
-        } else {
-            self.style = Some(Style::fg(fg));
-        }
+        self.style_mut().fg = Some(fg);
         self
     }
 
     /// Sets the background color for this styled string.
     pub fn on(mut self, bg: Color) -> Self {
-        if let Some(style) = self.style.as_mut() {
-            style.bg = Some(bg);
-        } else {
-            self.style = Some(Style::bg(bg));
-        }
+        self.style_mut().bg = Some(bg);
         self
     }
 
@@ -359,12 +345,14 @@ impl StyledString {
 
     /// Sets the given effect for this styled string.
     pub fn effect(mut self, effect: Effect) -> Self {
-        if let Some(style) = self.style.as_mut() {
-            style.effects.insert(effect);
-        } else {
-            self.style = Some(Style::effect(effect));
-        }
+        self.style_mut().effects.insert(effect);
         self
+    }
+
+    /// Returns a mutable reference to the style of this string, creating a new style with the
+    /// default settings if the style is currently `None`.
+    pub fn style_mut(&mut self) -> &mut Style {
+        self.style.get_or_insert_with(Default::default)
     }
 }
 
