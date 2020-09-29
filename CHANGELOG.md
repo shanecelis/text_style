@@ -6,6 +6,7 @@ SPDX-License-Identifier: CC0-1.0
 # Unreleased
 
 - Add `style_mut` method to `StyledStr` and `StyledString`.
+- Implement `From<Effect>` and `From<Effects>` for `Style`.
 
 # v0.1.0 (2020-09-24)
 

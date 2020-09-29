@@ -435,6 +435,18 @@ impl Style {
     }
 }
 
+impl From<Effect> for Style {
+    fn from(effect: Effect) -> Style {
+        Style::effect(effect)
+    }
+}
+
+impl From<Effects> for Style {
+    fn from(effects: Effects) -> Style {
+        Style::effects(effects)
+    }
+}
+
 impl AnsiColor {
     /// Returns the dark variant of this ANSI color.
     pub fn dark(self) -> Color {
