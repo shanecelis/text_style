@@ -9,6 +9,7 @@ SPDX-License-Identifier: CC0-1.0
 - Implement `From<Effect>` and `From<Effects>` for `Style`.
 - Always use `termion::style::Reset` to clear the formatting in the `termion`
   backend.
+- Add basic backend test suite.
 
 # v0.1.0 (2020-09-24)
 
