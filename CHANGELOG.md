@@ -7,6 +7,8 @@ SPDX-License-Identifier: CC0-1.0
 
 - Add `style_mut` method to `StyledStr` and `StyledString`.
 - Implement `From<Effect>` and `From<Effects>` for `Style`.
+- Always use `termion::style::Reset` to clear the formatting in the `termion`
+  backend.
 
 # v0.1.0 (2020-09-24)
 

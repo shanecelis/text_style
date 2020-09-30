@@ -17,6 +17,10 @@
 //! Alternatively, you can use the [`render`][] function to render a single string and the
 //! [`render_iter`][] function to render an iterator over strings.
 //!
+//! Note that this implementation always uses [`termion::style::Reset`][] to clear the formatting
+//! instead of [`termion::style::NoBold`][] etc. for compatibility with terminals that don’t
+//! support the *No Bold* style.
+//!
 //! # Examples
 //!
 //! Rendering a single string:
@@ -49,6 +53,8 @@
 //!
 //! [`Display`]: https://doc.rust-lang.org/std/fmt/trait.Display.html
 //! [`termion`]: https://docs.rs/termion
+//! [`termion::style::Reset`]: https://docs.rs/termion/latest/termion/style/struct.Reset.html
+//! [`termion::style::NoBold`]: https://docs.rs/termion/latest/termion/style/struct.NoBold.html
 //! [`StyledStr`]: ../struct.StyledStr.html
 //! [`StyledString`]: ../struct.StyledString.html
 //! [`render`]: fn.render.html
@@ -92,13 +98,13 @@ impl<'a> fmt::Display for TermionStr<'a> {
                 f.write_str(get_bg(bg).as_ref())?;
             }
             for effect in style.effects.iter() {
-                f.write_str(get_effect_start(effect))?;
+                f.write_str(get_effect(effect))?;
             }
         }
         f.write_str(self.s)?;
         if let Some(style) = &self.style {
-            for effect in style.effects.iter() {
-                f.write_str(get_effect_end(effect))?;
+            if style.fg.is_some() || style.bg.is_some() || !style.effects.is_empty() {
+                f.write_str(style::Reset.as_ref())?;
             }
         }
         Ok(())
@@ -209,19 +215,11 @@ fn get_ansi_fg(color: AnsiColor, mode: AnsiMode) -> &'static str {
     }
 }
 
-fn get_effect_start(effect: Effect) -> &'static str {
+fn get_effect(effect: Effect) -> &'static str {
     match effect {
         Effect::Bold => style::Bold.as_ref(),
         Effect::Italic => style::Italic.as_ref(),
         Effect::Underline => style::Underline.as_ref(),
-    }
-}
-
-fn get_effect_end(effect: Effect) -> &'static str {
-    match effect {
-        Effect::Bold => style::NoBold.as_ref(),
-        Effect::Italic => style::NoItalic.as_ref(),
-        Effect::Underline => style::NoUnderline.as_ref(),
     }
 }
 
