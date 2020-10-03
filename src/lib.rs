@@ -433,6 +433,40 @@ impl Style {
         self.effects = self.effects.union(style.effects);
         self
     }
+
+    /// Sets the foreground color of this style.
+    pub fn set_fg(&mut self, color: Color) {
+        self.fg = Some(color);
+    }
+
+    /// Sets the background color of this style.
+    pub fn set_bg(&mut self, color: Color) {
+        self.bg = Some(color);
+    }
+
+    /// Sets or unsets the bold effect for this style.
+    pub fn set_bold(&mut self, bold: bool) {
+        self.set_effect(Effect::Bold, bold);
+    }
+
+    /// Sets or unsets the italic effect for this style.
+    pub fn set_italic(&mut self, italic: bool) {
+        self.set_effect(Effect::Italic, italic);
+    }
+
+    /// Sets or unsets the underline effect for this style.
+    pub fn set_underline(&mut self, underline: bool) {
+        self.set_effect(Effect::Underline, underline);
+    }
+
+    /// Sets or unsets the given effect for this style.
+    pub fn set_effect(&mut self, effect: Effect, set: bool) {
+        if set {
+            self.effects.insert(effect);
+        } else {
+            self.effects.remove(effect);
+        }
+    }
 }
 
 impl From<Effect> for Style {

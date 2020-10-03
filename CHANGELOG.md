@@ -3,6 +3,10 @@ SPDX-FileCopyrightText: 2020 Robin Krahl <robin.krahl@ireas.org>
 SPDX-License-Identifier: CC0-1.0
 -->
 
+# Unreleased
+
+- Add setter methods to `Style`.
+
 # v0.1.1 (2020-09-30)
 
 This patch release makes sure that the font style is properly reset in the
