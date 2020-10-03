@@ -93,6 +93,8 @@
 //! [`cursive::utils::markup::StyledString`]: https://docs.rs/cursive/latest/cursive/utils/markup/type.StyledString.html
 //! [`syntect::highlighting::Style`]: https://docs.rs/syntect/latest/syntect/highlighting/struct.Style.html
 
+#![warn(missing_docs, rust_2018_idioms)]
+
 #[cfg(feature = "ansi_term")]
 pub mod ansi_term;
 #[cfg(feature = "crossterm")]
