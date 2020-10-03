@@ -1,7 +1,16 @@
 // Copyright (C) 2020 Robin Krahl <robin.krahl@ireas.org>
 // SPDX-License-Identifier: CC0-1.0
 
-use std::collections;
+//! This example uses `syntect` to syntac highlight a file and then uses one of the `text_style`
+//! backends to render the highlighted file.
+//!
+//! To run this example, you have to activate all features using the `--all-features` option.  For
+//! example, to highlight this file with the `termion` backend:
+//!
+//! ```
+//! $ cargo run --example syntect --all-features examples/syntect.rs termion
+//! ```
+
 use std::fs;
 use std::io;
 
@@ -15,48 +24,49 @@ struct Args {
     #[argh(positional)]
     input: String,
 
-    /// the output method (debug, crossterm).
+    /// the output method (debug, ansi_term, crossterm, cursive, termion).
     #[argh(positional)]
-    render_method: String,
+    backend: String,
 }
 
-type RenderMethod = Box<dyn Fn(&[Vec<text_style::StyledStr<'_>>])>;
+fn render<'a, 's, I>(backend: &str, strings: I)
+where
+    's: 'a,
+    I: Iterator<Item = &'a text_style::StyledStr<'s>>,
+{
+    match backend {
+        "ansi_term" => {
+            text_style::ansi_term::render_iter(io::stdout(), strings)
+                .expect("ansi_term rendering failed");
+        }
+        "crossterm" => {
+            text_style::crossterm::render_iter(io::stdout(), strings)
+                .expect("crossterm rendering failed");
+        }
+        "cursive" => {
+            use cursive::view::Scrollable as _;
 
-#[cfg(feature = "ansi_term")]
-fn render_ansi_term(lines: &[Vec<text_style::StyledStr<'_>>]) {
-    text_style::ansi_term::render_iter(io::stdout(), lines.iter().flatten())
-        .expect("ansi_term rendering failed");
-}
-
-#[cfg(feature = "crossterm")]
-fn render_crossterm(lines: &[Vec<text_style::StyledStr<'_>>]) {
-    text_style::crossterm::render_iter(io::stdout(), lines.iter().flatten())
-        .expect("crossterm rendering failed");
-}
-
-#[cfg(feature = "cursive")]
-fn render_cursive(lines: &[Vec<text_style::StyledStr<'_>>]) {
-    use cursive::view::Scrollable;
-
-    let mut s = cursive::default();
-    let mut view = cursive::views::TextView::new("");
-    for s in lines.iter().flatten() {
-        view.append(s);
-    }
-    s.add_layer(view.scrollable());
-    s.add_global_callback('q', |s| s.quit());
-    s.run();
-}
-
-#[cfg(feature = "termion")]
-fn render_termion(lines: &[Vec<text_style::StyledStr<'_>>]) {
-    text_style::termion::render_iter(io::stdout(), lines.iter().flatten())
-        .expect("termion rendering failed");
-}
-
-fn render_debug(lines: &[Vec<text_style::StyledStr<'_>>]) {
-    for line in lines {
-        println!("{:?}", line);
+            let mut s = cursive::default();
+            let mut view = cursive::views::TextView::new("");
+            for s in strings {
+                view.append(s);
+            }
+            s.add_layer(view.scrollable());
+            s.add_global_callback('q', |s| s.quit());
+            s.run();
+        }
+        "termion" => {
+            text_style::termion::render_iter(io::stdout(), strings)
+                .expect("termion rendering failed");
+        }
+        "debug" => {
+            for s in strings {
+                println!("{:?}", s);
+            }
+        }
+        _ => {
+            panic!("Unsupported backend {}", backend);
+        }
     }
 }
 
@@ -65,25 +75,6 @@ fn main() {
     let ts = highlighting::ThemeSet::load_defaults();
 
     let args: Args = argh::from_env();
-
-    let mut render_methods: collections::BTreeMap<_, RenderMethod> = collections::BTreeMap::new();
-    render_methods.insert("debug", Box::new(render_debug));
-    if cfg!(feature = "ansi_term") {
-        render_methods.insert("ansi_term", Box::new(render_ansi_term));
-    }
-    if cfg!(feature = "crossterm") {
-        render_methods.insert("crossterm", Box::new(render_crossterm));
-    }
-    if cfg!(feature = "cursive") {
-        render_methods.insert("cursive", Box::new(render_cursive));
-    }
-    if cfg!(feature = "termion") {
-        render_methods.insert("termion", Box::new(render_termion));
-    }
-
-    let render_method = render_methods
-        .get(args.render_method.as_str())
-        .expect("Unsupported render method.  Did you activate all features?");
 
     let syntax = ps
         .find_syntax_for_file(&args.input)
@@ -99,5 +90,5 @@ fn main() {
         lines.push(styled_strs);
     }
 
-    render_method(&lines);
+    render(&args.backend, lines.iter().flatten());
 }
