@@ -157,7 +157,7 @@ pub struct Style {
 }
 
 /// A text effect.
-#[derive(Debug, enumset::EnumSetType)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Effect {
     /// Bold text.
     Bold,
@@ -167,8 +167,26 @@ pub enum Effect {
     Underline,
 }
 
+/// All available text effects.
+pub const EFFECTS: &[Effect] = &[Effect::Bold, Effect::Italic, Effect::Underline];
+
 /// A set of text effects.
-pub type Effects = enumset::EnumSet<Effect>;
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
+pub struct Effects {
+    /// Whether the bold text effect is set.
+    pub is_bold: bool,
+    /// Whether the italic text effect is set.
+    pub is_italic: bool,
+    /// Whether the underline text effect is set.
+    pub is_underline: bool,
+}
+
+/// An iterator over text effects.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct EffectsIter {
+    effects: Effects,
+    i: usize,
+}
 
 /// A color.
 ///
@@ -289,7 +307,7 @@ impl<'a> StyledStr<'a> {
 
     /// Sets the given effect for this styled string.
     pub fn effect(mut self, effect: Effect) -> Self {
-        self.style_mut().effects.insert(effect);
+        self.style_mut().effects.set(effect, true);
         self
     }
 
@@ -345,7 +363,7 @@ impl StyledString {
 
     /// Sets the given effect for this styled string.
     pub fn effect(mut self, effect: Effect) -> Self {
-        self.style_mut().effects.insert(effect);
+        self.style_mut().effects.set(effect, true);
         self
     }
 
@@ -409,7 +427,7 @@ impl Style {
         Style::new(None, None, effects)
     }
 
-    /// Combine this style with another style.
+    /// Combines this style with another style.
     ///
     /// If a color is set by both styles, the current color is overwritten.
     ///
@@ -430,7 +448,7 @@ impl Style {
         if let Some(bg) = style.bg {
             self.bg = Some(bg);
         }
-        self.effects = self.effects.union(style.effects);
+        self.effects = self.effects.and(style.effects);
         self
     }
 
@@ -446,26 +464,22 @@ impl Style {
 
     /// Sets or unsets the bold effect for this style.
     pub fn set_bold(&mut self, bold: bool) {
-        self.set_effect(Effect::Bold, bold);
+        self.effects.is_bold = bold;
     }
 
     /// Sets or unsets the italic effect for this style.
     pub fn set_italic(&mut self, italic: bool) {
-        self.set_effect(Effect::Italic, italic);
+        self.effects.is_italic = italic;
     }
 
     /// Sets or unsets the underline effect for this style.
     pub fn set_underline(&mut self, underline: bool) {
-        self.set_effect(Effect::Underline, underline);
+        self.effects.is_underline = underline;
     }
 
     /// Sets or unsets the given effect for this style.
     pub fn set_effect(&mut self, effect: Effect, set: bool) {
-        if set {
-            self.effects.insert(effect);
-        } else {
-            self.effects.remove(effect);
-        }
+        self.effects.set(effect, set);
     }
 }
 
@@ -478,6 +492,104 @@ impl From<Effect> for Style {
 impl From<Effects> for Style {
     fn from(effects: Effects) -> Style {
         Style::effects(effects)
+    }
+}
+
+impl Effects {
+    /// Creates an empty set of text effects.
+    pub fn new() -> Effects {
+        Default::default()
+    }
+
+    /// Creates an empty set of text effects.
+    pub fn empty() -> Effects {
+        Effects::new()
+    }
+
+    /// Creates a set of text effects with only the given effect.
+    pub fn only(effect: Effect) -> Effects {
+        Effects::from(effect)
+    }
+
+    /// Sets or unsets the given text effect.
+    pub fn set(&mut self, effect: Effect, set: bool) {
+        match effect {
+            Effect::Bold => self.is_bold = set,
+            Effect::Italic => self.is_italic = set,
+            Effect::Underline => self.is_underline = set,
+        }
+    }
+
+    /// Checks whether the given effect is set.
+    pub fn is_set(&self, effect: Effect) -> bool {
+        match effect {
+            Effect::Bold => self.is_bold,
+            Effect::Italic => self.is_italic,
+            Effect::Underline => self.is_underline,
+        }
+    }
+
+    /// Combines this set of text effects with another set of text effects.
+    pub fn and(&self, other: Effects) -> Effects {
+        Effects {
+            is_bold: self.is_bold || other.is_bold,
+            is_italic: self.is_italic || other.is_italic,
+            is_underline: self.is_underline || other.is_underline,
+        }
+    }
+
+    /// Checks whether this set of text effects is empty.
+    pub fn is_empty(&self) -> bool {
+        !self.is_bold && !self.is_italic && !self.is_underline
+    }
+}
+
+impl std::iter::FromIterator<Effect> for Effects {
+    fn from_iter<I: IntoIterator<Item = Effect>>(iter: I) -> Effects {
+        let mut effects = Effects::new();
+        for effect in iter {
+            effects.set(effect, true);
+        }
+        effects
+    }
+}
+
+impl IntoIterator for Effects {
+    type Item = Effect;
+    type IntoIter = EffectsIter;
+
+    fn into_iter(self) -> EffectsIter {
+        EffectsIter::from(self)
+    }
+}
+
+impl From<Effect> for Effects {
+    fn from(effect: Effect) -> Effects {
+        let mut effects = Effects::new();
+        effects.set(effect, true);
+        effects
+    }
+}
+
+impl Iterator for EffectsIter {
+    type Item = Effect;
+
+    fn next(&mut self) -> Option<Effect> {
+        let mut next = None;
+        while let Some(effect) = EFFECTS.get(self.i) {
+            self.i += 1;
+            if self.effects.is_set(*effect) {
+                next = Some(*effect);
+                break;
+            }
+        }
+        next
+    }
+}
+
+impl From<Effects> for EffectsIter {
+    fn from(effects: Effects) -> EffectsIter {
+        EffectsIter { effects, i: 0 }
     }
 }
 

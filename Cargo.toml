@@ -16,9 +16,6 @@ license = "Apache-2.0 OR MIT"
 exclude = [".builds/*"]
 readme = "README.md"
 
-[dependencies]
-enumset = "1"
-
 [dependencies.ansi_term]
 version = "0.12"
 optional = true

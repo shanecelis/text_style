@@ -7,6 +7,7 @@
 //!
 //! This module implements these conversions:
 //! - [`syntect::highlighting::Color`][] to [`Color`][]
+//! - [`syntect::highlighting::FontStyle`][] to [`Effects`][]
 //! - [`syntect::highlighting::Style`][] to [`Style`][]
 //! - `(&str, syntect::highlighting::Style)` to [`StyledStr`][]
 //!
@@ -32,14 +33,16 @@
 //!
 //! [`syntect`]: https://docs.rs/syntect
 //! [`syntect::highlighting::Color`]: https://docs.rs/syntect/latest/syntect/highlighting/struct.Color.html
+//! [`syntect::highlighting::FontStyle`]: https://docs.rs/syntect/latest/syntect/highlighting/struct.Style.html
 //! [`syntect::highlighting::Style`]: https://docs.rs/syntect/latest/syntect/highlighting/struct.Style.html
 //! [`Color`]: ../enum.Color.html
+//! [`Effects`]: ../struct.Effects.html
 //! [`Style`]: ../struct.Style.html
 //! [`StyledStr`]: ../struct.StyledStr.html
 
 use syntect::highlighting;
 
-use crate::{Color, Effect, Effects, Style, StyledStr};
+use crate::{Color, Effects, Style, StyledStr};
 
 impl From<highlighting::Color> for Color {
     fn from(color: highlighting::Color) -> Color {
@@ -51,28 +54,24 @@ impl From<highlighting::Color> for Color {
     }
 }
 
+impl From<highlighting::FontStyle> for Effects {
+    fn from(font_style: highlighting::FontStyle) -> Effects {
+        Effects {
+            is_bold: font_style.contains(highlighting::FontStyle::BOLD),
+            is_italic: font_style.contains(highlighting::FontStyle::ITALIC),
+            is_underline: font_style.contains(highlighting::FontStyle::UNDERLINE),
+        }
+    }
+}
+
 impl From<highlighting::Style> for Style {
     fn from(style: highlighting::Style) -> Style {
         Style {
             fg: Some(style.foreground.into()),
             bg: Some(style.background.into()),
-            effects: get_effects(style.font_style),
+            effects: style.font_style.into(),
         }
     }
-}
-
-fn get_effects(font_style: highlighting::FontStyle) -> Effects {
-    let mut effects = Effects::new();
-    if font_style.contains(highlighting::FontStyle::BOLD) {
-        effects.insert(Effect::Bold);
-    }
-    if font_style.contains(highlighting::FontStyle::ITALIC) {
-        effects.insert(Effect::Italic);
-    }
-    if font_style.contains(highlighting::FontStyle::UNDERLINE) {
-        effects.insert(Effect::Underline);
-    }
-    effects
 }
 
 impl<'a, 'b> From<&'b (highlighting::Style, &'a str)> for StyledStr<'a> {

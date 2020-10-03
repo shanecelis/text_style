@@ -8,6 +8,10 @@ SPDX-License-Identifier: CC0-1.0
 - Add setter methods to `Style`.
 - Accept `IntoIterator` in `render_iter` functions (instead of directly using
   `Iterator`).
+- Refactor `Effects`:
+  - Change `Effects` to a struct with boolean fields instead of an enum set.
+  - Implement `From<syntect::highlighting::FontStyle>` for `Effects`.
+  - Drop the `enumset` dependency.
 
 # v0.1.1 (2020-09-30)
 

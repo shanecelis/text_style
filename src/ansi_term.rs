@@ -48,7 +48,7 @@
 
 use std::io;
 
-use crate::{AnsiColor, AnsiMode, Color, Effect, Style, StyledStr, StyledString};
+use crate::{AnsiColor, AnsiMode, Color, Style, StyledStr, StyledString};
 
 impl From<Color> for ansi_term::Color {
     fn from(color: Color) -> ansi_term::Color {
@@ -93,9 +93,9 @@ impl From<Style> for ansi_term::Style {
         ansi_term::Style {
             foreground: style.fg.map(Into::into),
             background: style.bg.map(Into::into),
-            is_bold: style.effects.contains(Effect::Bold),
-            is_italic: style.effects.contains(Effect::Italic),
-            is_underline: style.effects.contains(Effect::Underline),
+            is_bold: style.effects.is_bold,
+            is_italic: style.effects.is_italic,
+            is_underline: style.effects.is_underline,
             ..Default::default()
         }
     }

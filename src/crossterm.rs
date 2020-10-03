@@ -8,6 +8,7 @@
 //! This module implements these conversions:
 //! - [`Color`][] to [`crossterm::style::Color`][]
 //! - [`Effect`][] to [`crossterm::style::Attribute`][]
+//! - [`Effects`][] to [`crossterm::style::Attributes`][]
 //! - [`Style`][] to [`crossterm::style::ContentStyle`][]
 //! - [`StyledStr`][] and [`StyledString`][] to [`crossterm::style::StyledContent`][]
 //!
@@ -38,11 +39,13 @@
 //!
 //! [`crossterm`]: https://docs.rs/crossterm
 //! [`crossterm::style::Attribute`]: https://docs.rs/crossterm/latest/crossterm/style/enum.Attribute.html
+//! [`crossterm::style::Attributes`]: https://docs.rs/crossterm/latest/crossterm/style/struct.Attributes.html
 //! [`crossterm::style::Color`]: https://docs.rs/crossterm/latest/crossterm/style/enum.Color.html
 //! [`crossterm::style::ContentStyle`]: https://docs.rs/crossterm/latest/crossterm/style/struct.ContentStyle.html
 //! [`crossterm::style::StyledContent`]: https://docs.rs/crossterm/latest/crossterm/style/struct.StyledContent.html
 //! [`Color`]: ../enum.Color.html
 //! [`Effect`]: ../enum.Effect.html
+//! [`Effects`]: ../struct.Effects.html
 //! [`Style`]: ../struct.Style.html
 //! [`StyledStr`]: ../struct.StyledStr.html
 //! [`StyledString`]: ../struct.StyledString.html
@@ -50,11 +53,10 @@
 //! [`render_iter`]: fn.render_iter.html
 
 use std::io;
-use std::iter;
 
 use crossterm::style;
 
-use crate::{AnsiColor, AnsiMode, Color, Effect, Style, StyledStr, StyledString};
+use crate::{AnsiColor, AnsiMode, Color, Effect, Effects, Style, StyledStr, StyledString};
 
 impl From<Color> for style::Color {
     fn from(color: Color) -> style::Color {
@@ -96,13 +98,10 @@ impl From<Effect> for style::Attribute {
     }
 }
 
-impl iter::FromIterator<Effect> for style::Attributes {
-    fn from_iter<T>(iter: T) -> style::Attributes
-    where
-        T: IntoIterator<Item = Effect>,
-    {
+impl From<Effects> for style::Attributes {
+    fn from(effects: Effects) -> style::Attributes {
         let mut attributes = style::Attributes::default();
-        for effect in iter {
+        for effect in effects {
             attributes.set(effect.into());
         }
         attributes
@@ -114,7 +113,7 @@ impl From<Style> for style::ContentStyle {
         style::ContentStyle {
             foreground_color: style.fg.map(Into::into),
             background_color: style.bg.map(Into::into),
-            attributes: iter::FromIterator::from_iter(style.effects),
+            attributes: style.effects.into(),
         }
     }
 }

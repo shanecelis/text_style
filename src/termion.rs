@@ -97,7 +97,7 @@ impl<'a> fmt::Display for TermionStr<'a> {
             if let Some(bg) = style.bg {
                 f.write_str(get_bg(bg).as_ref())?;
             }
-            for effect in style.effects.iter() {
+            for effect in style.effects {
                 f.write_str(get_effect(effect))?;
             }
         }
