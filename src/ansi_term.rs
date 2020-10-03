@@ -155,13 +155,15 @@ pub fn render<'a>(mut w: impl io::Write, s: impl Into<StyledStr<'a>>) -> io::Res
 /// ```
 ///
 /// [`ansi_term::ANSIStrings`]: https://docs.rs/ansi_term/latest/ansi_term/fn.ANSIStrings.html
-pub fn render_iter<'a, I, S, W>(mut w: W, iter: I) -> io::Result<()>
+pub fn render_iter<'a, I, Iter, S, W>(mut w: W, iter: I) -> io::Result<()>
 where
-    I: Iterator<Item = S>,
+    I: IntoIterator<Item = S, IntoIter = Iter>,
+    Iter: Iterator<Item = S>,
     S: Into<StyledStr<'a>>,
     W: io::Write,
 {
     let strings: Vec<_> = iter
+        .into_iter()
         .map(Into::into)
         .map(ansi_term::ANSIString::from)
         .collect();

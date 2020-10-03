@@ -168,9 +168,10 @@ pub fn render<'a>(mut w: impl io::Write, s: impl Into<StyledStr<'a>>) -> crosste
 /// text_style::crossterm::render_iter(std::io::stdout(), v.iter())
 ///     .expect("Failed to render string");
 /// ```
-pub fn render_iter<'a, I, S, W>(mut w: W, iter: I) -> crossterm::Result<()>
+pub fn render_iter<'a, I, Iter, S, W>(mut w: W, iter: I) -> crossterm::Result<()>
 where
-    I: Iterator<Item = S>,
+    I: IntoIterator<Item = S, IntoIter = Iter>,
+    Iter: Iterator<Item = S>,
     S: Into<StyledStr<'a>>,
     W: io::Write,
 {

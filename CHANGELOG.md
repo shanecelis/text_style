@@ -6,6 +6,8 @@ SPDX-License-Identifier: CC0-1.0
 # Unreleased
 
 - Add setter methods to `Style`.
+- Accept `IntoIterator` in `render_iter` functions (instead of directly using
+  `Iterator`).
 
 # v0.1.1 (2020-09-30)
 

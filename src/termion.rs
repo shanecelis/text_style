@@ -249,9 +249,10 @@ pub fn render<'a>(mut w: impl io::Write, s: impl Into<StyledStr<'a>>) -> io::Res
 /// text_style::termion::render_iter(std::io::stdout(), v.iter())
 ///     .expect("Failed to render string");
 /// ```
-pub fn render_iter<'a, I, S, W>(mut w: W, iter: I) -> io::Result<()>
+pub fn render_iter<'a, I, Iter, S, W>(mut w: W, iter: I) -> io::Result<()>
 where
-    I: Iterator<Item = S>,
+    I: IntoIterator<Item = S, IntoIter = Iter>,
+    Iter: Iterator<Item = S>,
     S: Into<StyledStr<'a>>,
     W: io::Write,
 {
