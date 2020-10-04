@@ -422,6 +422,18 @@ impl<'a> From<StyledStr<'a>> for StyledString {
     }
 }
 
+impl<'a> From<&'a str> for StyledStr<'a> {
+    fn from(s: &'a str) -> StyledStr<'a> {
+        StyledStr::plain(s)
+    }
+}
+
+impl From<String> for StyledString {
+    fn from(s: String) -> StyledString {
+        StyledString::plain(s)
+    }
+}
+
 impl Style {
     /// Creates a new style with the given foreground and background colors and effects.
     pub fn new(fg: Option<Color>, bg: Option<Color>, effects: Effects) -> Style {

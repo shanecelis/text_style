@@ -6,6 +6,7 @@ SPDX-License-Identifier: CC0-1.0
 # Unreleased
 
 - Add `Strikethrough` effect.
+- Implement `From<&str>` for `StyledStr` and `From<String>` for `StyledString`.
 
 # v0.2.0 (2020-10-03)
 
