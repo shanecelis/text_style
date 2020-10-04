@@ -8,7 +8,7 @@
 //! The central types of this crate are [`StyledStr`][] and [`StyledString`][]:  owned and borrowed
 //! strings that are annotated with an optional style information, [`Style`][].  This style
 //! information consists of foreground and background colors ([`Color`][]) and multiple effects
-//! ([`Effect`][]: bold, italic or underline).
+//! ([`Effect`][]: bold, italic, underline or strikeout).
 //!
 //! `text_style`’s types can be created directly or converted from or to several formats (all
 //! optional and activated by features):
@@ -167,10 +167,17 @@ pub enum Effect {
     Italic,
     /// Underlined text.
     Underline,
+    /// Struckthrough text.
+    Strikethrough,
 }
 
 /// All available text effects.
-pub const EFFECTS: &[Effect] = &[Effect::Bold, Effect::Italic, Effect::Underline];
+pub const EFFECTS: &[Effect] = &[
+    Effect::Bold,
+    Effect::Italic,
+    Effect::Underline,
+    Effect::Strikethrough,
+];
 
 /// A set of text effects.
 #[derive(Clone, Copy, Debug, Default, PartialEq)]
@@ -181,6 +188,8 @@ pub struct Effects {
     pub is_italic: bool,
     /// Whether the underline text effect is set.
     pub is_underline: bool,
+    /// Whether the strikethrough text effect is set.
+    pub is_strikethrough: bool,
 }
 
 /// An iterator over text effects.
@@ -307,6 +316,11 @@ impl<'a> StyledStr<'a> {
         self.effect(Effect::Underline)
     }
 
+    /// Sets the strikethrough effect for this styled string.
+    pub fn strikethrough(self) -> Self {
+        self.effect(Effect::Strikethrough)
+    }
+
     /// Sets the given effect for this styled string.
     pub fn effect(mut self, effect: Effect) -> Self {
         self.style_mut().effects.set(effect, true);
@@ -361,6 +375,11 @@ impl StyledString {
     /// Sets the underline effect for this styled string.
     pub fn underline(self) -> Self {
         self.effect(Effect::Underline)
+    }
+
+    /// Sets the strikethrough effect for this styled string.
+    pub fn strikethrough(self) -> Self {
+        self.effect(Effect::Strikethrough)
     }
 
     /// Sets the given effect for this styled string.
@@ -479,6 +498,11 @@ impl Style {
         self.effects.is_underline = underline;
     }
 
+    /// Sets or unsets the strikethrough effect for this style.
+    pub fn strikethrough(&mut self, strikethrough: bool) {
+        self.effects.is_strikethrough = strikethrough;
+    }
+
     /// Sets or unsets the given effect for this style.
     pub fn set_effect(&mut self, effect: Effect, set: bool) {
         self.effects.set(effect, set);
@@ -519,6 +543,7 @@ impl Effects {
             Effect::Bold => self.is_bold = set,
             Effect::Italic => self.is_italic = set,
             Effect::Underline => self.is_underline = set,
+            Effect::Strikethrough => self.is_strikethrough = set,
         }
     }
 
@@ -528,6 +553,7 @@ impl Effects {
             Effect::Bold => self.is_bold,
             Effect::Italic => self.is_italic,
             Effect::Underline => self.is_underline,
+            Effect::Strikethrough => self.is_strikethrough,
         }
     }
 
@@ -537,12 +563,13 @@ impl Effects {
             is_bold: self.is_bold || other.is_bold,
             is_italic: self.is_italic || other.is_italic,
             is_underline: self.is_underline || other.is_underline,
+            is_strikethrough: self.is_strikethrough || other.is_strikethrough,
         }
     }
 
     /// Checks whether this set of text effects is empty.
     pub fn is_empty(&self) -> bool {
-        !self.is_bold && !self.is_italic && !self.is_underline
+        !self.is_bold && !self.is_italic && !self.is_underline && !self.is_strikethrough
     }
 }
 

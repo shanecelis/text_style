@@ -107,6 +107,29 @@ mod underline {
     }
 }
 
+mod strikethrough {
+    const OUTPUT: &[&'static str] = &["\x1b[9mtest\x1b[0m", "\x1b[9mtest\x1b[m"];
+
+    fn input() -> text_style::StyledStr<'static> {
+        text_style::StyledStr::plain("test").strikethrough()
+    }
+
+    test_cases! { [input(); OUTPUT]
+        ansi_term,
+        crossterm,
+        termion,
+    }
+
+    #[test]
+    fn cursive() {
+        use cursive::utils::markup;
+
+        let input = input();
+        let output = markup::StyledString::styled("test", cursive::theme::Effect::Strikethrough);
+        assert_eq!(output, markup::StyledString::from(input));
+    }
+}
+
 mod fg {
     const OUTPUT: &[&'static str] = &[
         "\x1b[31mtest\x1b[0m",

@@ -96,6 +96,7 @@ impl From<Style> for ansi_term::Style {
             is_bold: style.effects.is_bold,
             is_italic: style.effects.is_italic,
             is_underline: style.effects.is_underline,
+            is_strikethrough: style.effects.is_strikethrough,
             ..Default::default()
         }
     }

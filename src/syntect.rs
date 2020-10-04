@@ -60,6 +60,7 @@ impl From<highlighting::FontStyle> for Effects {
             is_bold: font_style.contains(highlighting::FontStyle::BOLD),
             is_italic: font_style.contains(highlighting::FontStyle::ITALIC),
             is_underline: font_style.contains(highlighting::FontStyle::UNDERLINE),
+            is_strikethrough: false,
         }
     }
 }

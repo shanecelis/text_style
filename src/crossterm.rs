@@ -94,6 +94,7 @@ impl From<Effect> for style::Attribute {
             Effect::Bold => style::Attribute::Bold,
             Effect::Italic => style::Attribute::Italic,
             Effect::Underline => style::Attribute::Underlined,
+            Effect::Strikethrough => style::Attribute::CrossedOut,
         }
     }
 }

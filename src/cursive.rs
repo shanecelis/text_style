@@ -74,6 +74,7 @@ impl From<Effect> for theme::Effect {
             Effect::Bold => theme::Effect::Bold,
             Effect::Italic => theme::Effect::Italic,
             Effect::Underline => theme::Effect::Underline,
+            Effect::Strikethrough => theme::Effect::Strikethrough,
         }
     }
 }

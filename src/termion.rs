@@ -220,6 +220,7 @@ fn get_effect(effect: Effect) -> &'static str {
         Effect::Bold => style::Bold.as_ref(),
         Effect::Italic => style::Italic.as_ref(),
         Effect::Underline => style::Underline.as_ref(),
+        Effect::Strikethrough => style::CrossedOut.as_ref(),
     }
 }
 
