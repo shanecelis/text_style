@@ -7,6 +7,7 @@ SPDX-License-Identifier: CC0-1.0
 
 - Add `Strikethrough` effect.
 - Implement `From<&str>` for `StyledStr` and `From<String>` for `StyledString`.
+- Disable default features for `syntect`.
 
 # v0.2.0 (2020-10-03)
 
