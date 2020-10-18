@@ -9,6 +9,7 @@ SPDX-License-Identifier: CC0-1.0
 - Implement `From<&str>` for `StyledStr` and `From<String>` for `StyledString`.
 - Disable default features for `syntect`.
 - Add `genpdf` backend.
+- Update `crossterm` dependency to version 0.18.
 
 # v0.2.0 (2020-10-03)
 

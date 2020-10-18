@@ -152,8 +152,10 @@ mod strikethrough {
 
 mod fg {
     const OUTPUT: &[&'static str] = &[
+        "\x1b[31mtest\x1b[39m",
         "\x1b[31mtest\x1b[0m",
         "\x1b[31mtest\x1b[m",
+        "\x1b[38;5;1mtest\x1b[39m",
         "\x1b[38;5;1mtest\x1b[0m",
         "\x1b[38;5;1mtest\x1b[m",
     ];
@@ -196,8 +198,10 @@ mod fg {
 
 mod bg {
     const OUTPUT: &[&'static str] = &[
+        "\x1b[41mtest\x1b[49m",
         "\x1b[41mtest\x1b[0m",
         "\x1b[41mtest\x1b[m",
+        "\x1b[48;5;1mtest\x1b[49m",
         "\x1b[48;5;1mtest\x1b[0m",
         "\x1b[48;5;1mtest\x1b[m",
     ];
