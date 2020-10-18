@@ -16,6 +16,7 @@
 //! - [`ansi_term`][]: convert to [`ansi_term::ANSIString`][]
 //! - [`crossterm`][]: convert to [`crossterm::style::StyledContent`][]
 //! - [`cursive`][]: convert to [`cursive::utils::markup::StyledString`][]
+//! - [`genpdf`][]: convert to [`genpdf::style::StyledStr`][] and [`genpdf::style::StyledString`][]
 //! - [`syntect`][]: convert from [`syntect::highlighting::Style`][]
 //! - [`termion`][]: convert to a termion escape string
 //!
@@ -64,8 +65,10 @@
 //!
 //! ## Rendering styled text
 //!
-//! All backends (except `cursive`) define `render` and `render_iter` methods to display a styled
-//! string or an iterator over styled strings:
+//! The backends define conversion traits from or to the `text_style` types where applicable.
+//!
+//! Most backends also define `render` and `render_iter` methods to display a styled string or an
+//! iterator over styled strings:
 //!
 //! ```
 //! let s = text_style::StyledStr::plain("test").bold();
@@ -86,11 +89,14 @@
 //! [`ansi_term`]: ./ansi_term/index.html
 //! [`crossterm`]: ./crossterm/index.html
 //! [`cursive`]: ./cursive/index.html
+//! [`genpdf`]: ./genpdf/index.html
 //! [`syntect`]: ./syntect/index.html
 //! [`termion`]: ./termion/index.html
 //! [`ansi_term::ANSIString`]: https://docs.rs/ansi_term/latest/ansi_term/type.ANSIString.html
 //! [`crossterm::style::StyledContent`]: https://docs.rs/crossterm/latest/crossterm/style/struct.StyledContent.html
 //! [`cursive::utils::markup::StyledString`]: https://docs.rs/cursive/latest/cursive/utils/markup/type.StyledString.html
+//! [`genpdf::style::StyledStr`]: https://docs.rs/genpdf/latest/genpdf/style/struct.StyledStr.html
+//! [`genpdf::style::StyledString`]: https://docs.rs/genpdf/latest/genpdf/style/struct.StyledString.html
 //! [`syntect::highlighting::Style`]: https://docs.rs/syntect/latest/syntect/highlighting/struct.Style.html
 
 #![warn(missing_docs, rust_2018_idioms)]
@@ -101,6 +107,8 @@ pub mod ansi_term;
 pub mod crossterm;
 #[cfg(feature = "cursive")]
 pub mod cursive;
+#[cfg(feature = "genpdf")]
+pub mod genpdf;
 #[cfg(feature = "syntect")]
 pub mod syntect;
 #[cfg(feature = "termion")]

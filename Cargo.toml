@@ -29,6 +29,10 @@ version = "0.15"
 optional = true
 default-features = false
 
+[dependencies.genpdf]
+version = "0.1"
+optional = true
+
 [dependencies.termion]
 version = "1"
 optional = true

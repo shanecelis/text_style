@@ -28,6 +28,7 @@ tasks:
       cargo build --release --features ansi_term
       cargo build --release --features crossterm
       cargo build --release --features cursive
+      cargo build --release --features genpdf
       cargo build --release --features syntect
       cargo build --release --features termion
       cargo build --release --all-features

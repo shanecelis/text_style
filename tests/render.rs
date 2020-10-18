@@ -55,9 +55,19 @@ mod bold {
     fn cursive() {
         use cursive::utils::markup;
 
-        let input = text_style::StyledStr::plain("test").bold();
+        let input = input();
         let output = markup::StyledString::styled("test", cursive::theme::Effect::Bold);
         assert_eq!(output, markup::StyledString::from(input));
+    }
+
+    #[test]
+    fn genpdf() {
+        use genpdf::style;
+
+        let input = input();
+        let output = style::StyledStr::from(input.clone());
+        assert_eq!(output.s, input.s);
+        assert!(output.style.is_bold());
     }
 }
 
@@ -81,6 +91,16 @@ mod italic {
         let input = input();
         let output = markup::StyledString::styled("test", cursive::theme::Effect::Italic);
         assert_eq!(output, markup::StyledString::from(input));
+    }
+
+    #[test]
+    fn genpdf() {
+        use genpdf::style;
+
+        let input = input();
+        let output = style::StyledStr::from(input.clone());
+        assert_eq!(output.s, input.s);
+        assert!(output.style.is_italic());
     }
 }
 
@@ -161,6 +181,16 @@ mod fg {
             ),
         );
         assert_eq!(output, markup::StyledString::from(input));
+    }
+
+    #[test]
+    fn genpdf() {
+        use genpdf::style;
+
+        let input = input();
+        let output = style::StyledStr::from(input.clone());
+        assert_eq!(output.s, input.s);
+        assert_eq!(output.style.color(), Some(style::Color::Rgb(170, 0, 0)));
     }
 }
 
