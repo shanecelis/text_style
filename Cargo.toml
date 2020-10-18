@@ -43,12 +43,12 @@ anyhow = "1"
 argh = "0.1.3"
 
 [dev-dependencies.cursive]
-version = "*"
+version = "0.15"
 default-features = false
 features = ["crossterm-backend"]
 
 [dev-dependencies.syntect]
-version = "*"
+version = "4"
 default-features = false
 features = ["assets", "dump-load", "parsing", "regex-onig"]
 
