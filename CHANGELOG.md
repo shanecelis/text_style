@@ -1,5 +1,5 @@
 <!---
-SPDX-FileCopyrightText: 2020 Robin Krahl <robin.krahl@ireas.org>
+SPDX-FileCopyrightText: 2020-2021 Robin Krahl <robin.krahl@ireas.org>
 SPDX-License-Identifier: CC0-1.0
 -->
 
@@ -10,6 +10,7 @@ SPDX-License-Identifier: CC0-1.0
 - Disable default features for `syntect`.
 - Add `genpdf` backend.
 - Update `crossterm` dependency to version 0.18.
+- Update MSRV to 1.45.0.
 
 # v0.2.0 (2020-10-03)
 

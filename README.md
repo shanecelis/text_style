@@ -1,5 +1,5 @@
 <!---
-Copyright (C) 2020 Robin Krahl <robin.krahl@ireas.org>
+Copyright (C) 2020-2021 Robin Krahl <robin.krahl@ireas.org>
 SPDX-License-Identifier: CC0-1.0
 -->
 
@@ -38,7 +38,7 @@ All features are disabled per default.
 
 ## Minimum Supported Rust Version
 
-This crate supports Rust 1.42.0 or later.
+This crate supports Rust 1.45.0 or later.
 
 ## Contributing
 
