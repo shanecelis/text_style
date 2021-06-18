@@ -3,7 +3,10 @@ SPDX-FileCopyrightText: 2020-2021 Robin Krahl <robin.krahl@ireas.org>
 SPDX-License-Identifier: CC0-1.0
 -->
 
-# Unreleased
+# v0.3.0 (2021-06-18)
+
+This release adds the `genpdf` backend, the `Strikethrough` effect and some
+more `From` implementations and updates the dependencies.
 
 - Add `Strikethrough` effect.
 - Implement `From<&str>` for `StyledStr` and `From<String>` for `StyledString`.
