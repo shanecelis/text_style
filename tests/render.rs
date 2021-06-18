@@ -19,7 +19,7 @@ fn assert_output(expected: &[&str], actual: &str) {
         }
         msg.push_str("  found:\n");
         msg.push_str(&format!("    {:?}", actual));
-        panic!(msg);
+        panic!("{}", msg);
     }
 }
 
