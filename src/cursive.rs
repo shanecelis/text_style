@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020 Robin Krahl <robin.krahl@ireas.org>
+// SPDX-FileCopyrightText: 2020-2021 Robin Krahl <robin.krahl@ireas.org>
 // SPDX-License-Identifier: Apache-2.0 or MIT
 
 //! Conversion methods for [`cursive`][]’s text style types.
@@ -88,22 +88,16 @@ impl From<Style> for theme::Style {
     }
 }
 
-fn get_color_style(fg: Option<Color>, bg: Option<Color>) -> Option<theme::ColorStyle> {
-    let mut front = theme::Color::TerminalDefault;
-    let mut back = theme::Color::TerminalDefault;
-
-    if let Some(fg) = fg {
-        front = fg.into();
-    }
-    if let Some(bg) = bg {
-        back = bg.into();
-    }
-
-    if front == theme::Color::TerminalDefault && back == theme::Color::TerminalDefault {
-        None
-    } else {
-        Some(theme::ColorStyle::new(front, back))
-    }
+fn get_color_style(fg: Option<Color>, bg: Option<Color>) -> theme::ColorStyle {
+    let fg = fg
+        .map(theme::Color::from)
+        .map(theme::ColorType::from)
+        .unwrap_or_default();
+    let bg = bg
+        .map(theme::Color::from)
+        .map(theme::ColorType::from)
+        .unwrap_or_default();
+    theme::ColorStyle::new(fg, bg)
 }
 
 impl<'a, 'b> From<&'b StyledStr<'a>> for markup::StyledString {

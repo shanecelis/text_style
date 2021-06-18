@@ -10,6 +10,7 @@ SPDX-License-Identifier: CC0-1.0
 - Disable default features for `syntect`.
 - Add `genpdf` backend.
 - Update `crossterm` dependency to version 0.20.
+- Update `cursive` dependency to version 0.16.
 - Update MSRV to 1.45.0.
 
 # v0.2.0 (2020-10-03)

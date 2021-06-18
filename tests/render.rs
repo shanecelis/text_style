@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020 Robin Krahl <robin.krahl@ireas.org>
+// SPDX-FileCopyrightText: 2020-2021 Robin Krahl <robin.krahl@ireas.org>
 // SPDX-License-Identifier: Apache-2.0 or MIT
 
 fn render<F, E>(f: F) -> String
@@ -179,7 +179,7 @@ mod fg {
             "test",
             theme::ColorStyle::new(
                 theme::Color::Dark(theme::BaseColor::Red),
-                theme::Color::TerminalDefault,
+                theme::ColorType::InheritParent,
             ),
         );
         assert_eq!(output, markup::StyledString::from(input));
@@ -224,7 +224,7 @@ mod bg {
         let output = markup::StyledString::styled(
             "test",
             theme::ColorStyle::new(
-                theme::Color::TerminalDefault,
+                theme::ColorType::InheritParent,
                 theme::Color::Dark(theme::BaseColor::Red),
             ),
         );
