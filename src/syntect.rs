@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020 Robin Krahl <robin.krahl@ireas.org>
+// SPDX-FileCopyrightText: 2020-2021 Robin Krahl <robin.krahl@ireas.org>
 // SPDX-License-Identifier: Apache-2.0 or MIT
 
 //! Conversion methods for [`syntect`][]’s text style types.
@@ -79,7 +79,7 @@ impl<'a, 'b> From<&'b (highlighting::Style, &'a str)> for StyledStr<'a> {
     fn from((style, s): &'b (highlighting::Style, &'a str)) -> StyledStr<'a> {
         StyledStr {
             s,
-            style: Some(style.clone().into()),
+            style: Some(Style::from(*style)),
         }
     }
 }
