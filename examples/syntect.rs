@@ -35,14 +35,17 @@ where
     I: Iterator<Item = &'a text_style::StyledStr<'s>>,
 {
     match backend {
+        #[cfg(feature = "ansi_term")]
         "ansi_term" => {
             text_style::ansi_term::render_iter(io::stdout(), strings)
                 .expect("ansi_term rendering failed");
         }
+        #[cfg(feature = "crossterm")]
         "crossterm" => {
             text_style::crossterm::render_iter(io::stdout(), strings)
                 .expect("crossterm rendering failed");
         }
+        #[cfg(feature = "cursive")]
         "cursive" => {
             use cursive::view::Scrollable as _;
 
@@ -55,6 +58,7 @@ where
             s.add_global_callback('q', |s| s.quit());
             s.run();
         }
+        #[cfg(feature = "termion")]
         "termion" => {
             text_style::termion::render_iter(io::stdout(), strings)
                 .expect("termion rendering failed");
