@@ -42,6 +42,12 @@ version = "4"
 optional = true
 default-features = false
 
+[dependencies.bevy]
+version = "0.12"
+optional = true
+features = [ "bevy_render", "bevy_ui", "bevy_text", "bevy_core_pipeline", "bevy_asset", "bevy_sprite", "bevy_winit", "multi-threaded", "default_font" ]
+default-features = false
+
 [dev-dependencies]
 anyhow = "1"
 argh = "0.1.3"

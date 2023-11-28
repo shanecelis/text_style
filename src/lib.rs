@@ -113,7 +113,8 @@ pub mod genpdf;
 pub mod syntect;
 #[cfg(feature = "termion")]
 pub mod termion;
-
+#[cfg(feature = "bevy")]
+pub mod bevy;
 /// A borrowed string with an optional style annotation.
 ///
 /// # Example
