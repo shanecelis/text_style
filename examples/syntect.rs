@@ -40,6 +40,11 @@ where
             text_style::ansi_term::render_iter(io::stdout(), strings)
                 .expect("ansi_term rendering failed");
         }
+        #[cfg(feature = "colored")]
+        "colored" => {
+            text_style::colored::render_iter(io::stdout(), strings)
+                .expect("colored rendering failed");
+        }
         #[cfg(feature = "crossterm")]
         "crossterm" => {
             text_style::crossterm::render_iter(io::stdout(), strings)
