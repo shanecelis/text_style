@@ -115,6 +115,8 @@ pub mod syntect;
 pub mod termion;
 #[cfg(feature = "bevy")]
 pub mod bevy;
+#[cfg(feature = "colored")]
+pub mod colored;
 /// A borrowed string with an optional style annotation.
 ///
 /// # Example
