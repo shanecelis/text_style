@@ -11,12 +11,12 @@ struct PubColoredString {
     style: colored::Style,
 }
 
+#[rustfmt::skip]
 impl From<colored::Color> for Color {
     fn from(color: colored::Color) -> Color {
         use crate::AnsiColor;
         use crate::AnsiMode::*;
         use ::colored::Color::*;
-        #[rustfmt::skip]
         match color {
             Black         => Color::Ansi { color: AnsiColor::Black, mode: Dark },
             Red           => Color::Ansi { color: AnsiColor::Red, mode: Dark },
@@ -48,11 +48,11 @@ impl From<Color> for colored::Color {
     }
 }
 
+#[rustfmt::skip]
 fn get_ansi(color: AnsiColor, mode: AnsiMode) -> colored::Color {
     use ::colored::Color::*;
     use AnsiColor;
     use AnsiMode::*;
-    #[rustfmt::skip]
     match (mode, color) {
         (Dark, AnsiColor::Black)    => Black,
         (Dark, AnsiColor::Red)      => Red,
@@ -99,17 +99,6 @@ fn apply(effects: &Effects, mut string: colored::ColoredString) -> colored::Colo
     }
     string
 }
-
-// impl From<highlighting::FontStyle> for Effects {
-//     fn from(font_style: highlighting::FontStyle) -> Effects {
-//         Effects {
-//             is_bold: font_style.contains(highlighting::FontStyle::BOLD),
-//             is_italic: font_style.contains(highlighting::FontStyle::ITALIC),
-//             is_underline: font_style.contains(highlighting::FontStyle::UNDERLINE),
-//             is_strikethrough: false,
-//         }
-//     }
-// }
 
 impl From<colored::ColoredString> for StyledString {
     fn from(style: colored::ColoredString) -> StyledString {
@@ -181,21 +170,3 @@ where
     }
     Ok(())
 }
-
-// impl<'a, 'b> From<&'b (highlighting::Style, &'a str)> for StyledStr<'a> {
-//     fn from((style, s): &'b (highlighting::Style, &'a str)) -> StyledStr<'a> {
-//         StyledStr {
-//             s,
-//             style: Some(Style::from(*style)),
-//         }
-//     }
-// }
-
-// impl<'a> From<(highlighting::Style, &'a str)> for StyledStr<'a> {
-//     fn from((style, s): (highlighting::Style, &'a str)) -> StyledStr<'a> {
-//         StyledStr {
-//             s,
-//             style: Some(style.into()),
-//         }
-//     }
-// }
