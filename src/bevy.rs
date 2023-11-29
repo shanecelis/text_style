@@ -1,7 +1,8 @@
-use bevy::{self,
-           prelude::{*, Color as bevy_Color},
-};
 use crate::{AnsiColor, AnsiMode, Color, Style, StyledStr, StyledString};
+use bevy::{
+    self,
+    prelude::{Color as bevy_Color, *},
+};
 
 impl From<Color> for bevy_Color {
     fn from(c: Color) -> bevy_Color {
@@ -40,12 +41,19 @@ fn get_rgb_color(color: AnsiColor, mode: AnsiMode) -> bevy_Color {
 fn with_style(s: StyledString, text_style: TextStyle) -> TextBundle {
     let bundle = TextBundle::from_section(
         s.s,
-        s.style.and_then(|style| style.fg.map(|fg| TextStyle { color: fg.into(), ..text_style.clone() }))
-                .unwrap_or(text_style));
+        s.style
+            .and_then(|style| {
+                style.fg.map(|fg| TextStyle {
+                    color: fg.into(),
+                    ..text_style.clone()
+                })
+            })
+            .unwrap_or(text_style),
+    );
     let bg: Option<bevy_Color> = s.style.and_then(|style| style.bg.map(Into::into));
     match bg {
         None => bundle,
-        Some(color) => bundle.with_background_color(color)
+        Some(color) => bundle.with_background_color(color),
     }
 }
 
@@ -58,12 +66,19 @@ impl From<StyledString> for TextBundle {
 fn with_style_str<'a>(s: StyledStr<'a>, text_style: TextStyle) -> TextBundle {
     let bundle = TextBundle::from_section(
         s.s.to_owned(),
-        s.style.and_then(|style| style.fg.map(|fg| TextStyle { color: fg.into(), ..text_style.clone() }))
-                .unwrap_or(text_style));
+        s.style
+            .and_then(|style| {
+                style.fg.map(|fg| TextStyle {
+                    color: fg.into(),
+                    ..text_style.clone()
+                })
+            })
+            .unwrap_or(text_style),
+    );
     let bg: Option<bevy_Color> = s.style.and_then(|style| style.bg.map(Into::into));
     match bg {
         None => bundle,
-        Some(color) => bundle.with_background_color(color)
+        Some(color) => bundle.with_background_color(color),
     }
 }
 
@@ -73,20 +88,26 @@ impl<'a> From<StyledStr<'a>> for TextBundle {
     }
 }
 
-pub fn render<'a>(parent: &mut ChildBuilder<'_, '_, '_>, o: Option<TextStyle>, s: impl Into<StyledStr<'a>>) {
+pub fn render<'a>(
+    parent: &mut ChildBuilder<'_, '_, '_>,
+    o: Option<TextStyle>,
+    s: impl Into<StyledStr<'a>>,
+) {
     let mut bundle = with_style_str(s.into(), o.unwrap_or(TextStyle::default()));
     parent.spawn(bundle);
 }
 
-pub fn render_iter<'a, I, Iter, S>(parent: &mut ChildBuilder<'_, '_, '_>, o: Option<TextStyle>, iter: I)
-where
+pub fn render_iter<'a, I, Iter, S>(
+    parent: &mut ChildBuilder<'_, '_, '_>,
+    o: Option<TextStyle>,
+    iter: I,
+) where
     I: IntoIterator<Item = S, IntoIter = Iter>,
     Iter: Iterator<Item = S>,
     S: Into<StyledStr<'a>>,
 {
-    iter.into_iter()
-        .for_each(|b| render(parent, o.clone(), b));
-        // .map(Into::into)
-        // .map(TextBundle::from)
-        // .for_each(|b| { parent.spawn(b); });
+    iter.into_iter().for_each(|b| render(parent, o.clone(), b));
+    // .map(Into::into)
+    // .map(TextBundle::from)
+    // .for_each(|b| { parent.spawn(b); });
 }

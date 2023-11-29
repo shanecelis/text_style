@@ -6,7 +6,7 @@ use bevy::{
     diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin},
     prelude::*,
 };
-use text_style::{self, StyledStr, AnsiColor};
+use text_style::{self, AnsiColor, StyledStr};
 
 fn main() {
     App::new()
@@ -75,52 +75,52 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     ));
 
     let style = TextStyle {
-                    font: asset_server.load("fonts/FiraSans-Bold.ttf"),
-                    font_size: 60.0,
-                    color: Color::WHITE,
-                };
-    commands.spawn(NodeBundle {
-        style: Style {
-            align_items: AlignItems::FlexEnd,
-            top: Val::Px(100.0),
-            // width: Val::Px(100.0),
+        font: asset_server.load("fonts/FiraSans-Bold.ttf"),
+        font_size: 60.0,
+        color: Color::WHITE,
+    };
+    commands
+        .spawn(NodeBundle {
+            style: Style {
+                align_items: AlignItems::FlexEnd,
+                top: Val::Px(100.0),
+                // width: Val::Px(100.0),
+                ..default()
+            },
             ..default()
-        },
-        ..default()
-    }).with_children(|parent| {
-        text_style::bevy::render_iter(parent,
-                                      Some(TextStyle {
-                                          font_size: 50.0,
-                                          ..default()
-                                      }),
-                                      [
-            StyledStr::plain("ansi red light")
-            .with(AnsiColor::Red.light()),
-            " ".into(),
-            StyledStr::plain("red")
-            .with(text_style::Color::Rgb { r: 255, g: 0, b: 0 }),
-            " ".into(),
-            StyledStr::plain("on green dark")
-            .on(AnsiColor::Green.dark()),
-            " ".into(),
-            StyledStr::plain("on green")
-            .on(text_style::Color::Rgb { r: 0, g: 255, b: 0 }),
-        ]);
+        })
+        .with_children(|parent| {
+            text_style::bevy::render_iter(
+                parent,
+                Some(TextStyle {
+                    font_size: 50.0,
+                    ..default()
+                }),
+                [
+                    StyledStr::plain("ansi red light").with(AnsiColor::Red.light()),
+                    " ".into(),
+                    StyledStr::plain("red").with(text_style::Color::Rgb { r: 255, g: 0, b: 0 }),
+                    " ".into(),
+                    StyledStr::plain("on green dark").on(AnsiColor::Green.dark()),
+                    " ".into(),
+                    StyledStr::plain("on green").on(text_style::Color::Rgb { r: 0, g: 255, b: 0 }),
+                ],
+            );
 
-        // let a : [&dyn TextRender; 8]  = [
-        //     &"fg".color(DynColors::Rgb(255, 0, 0)),
-        //     &"fg".red(),
-        //     &" ",
-        //     &"bg".on_color(DynColors::Rgb(0, 255, 0)),
-        //     &"bg".on_green(),
-        //     &"  ",
-        //     &"fgbg".color(DynColors::Rgb(0,0,255)).on_color(DynColors::Rgb(255, 255, 255)),
-        //     &"fgbg".blue().on_white(),
-        // ];
-        // for c in do_renders(a.into_iter(), style) {
-        //     parent.spawn(c);
-        // }
-    });
+            // let a : [&dyn TextRender; 8]  = [
+            //     &"fg".color(DynColors::Rgb(255, 0, 0)),
+            //     &"fg".red(),
+            //     &" ",
+            //     &"bg".on_color(DynColors::Rgb(0, 255, 0)),
+            //     &"bg".on_green(),
+            //     &"  ",
+            //     &"fgbg".color(DynColors::Rgb(0,0,255)).on_color(DynColors::Rgb(255, 255, 255)),
+            //     &"fgbg".blue().on_white(),
+            // ];
+            // for c in do_renders(a.into_iter(), style) {
+            //     parent.spawn(c);
+            // }
+        });
 }
 
 fn text_color_system(time: Res<Time>, mut query: Query<&mut Text, With<ColorText>>) {
@@ -139,7 +139,8 @@ fn text_color_system(time: Res<Time>, mut query: Query<&mut Text, With<ColorText
 
 fn text_update_system(
     diagnostics: Res<DiagnosticsStore>,
-    mut query: Query<&mut Text, With<FpsText>>) {
+    mut query: Query<&mut Text, With<FpsText>>,
+) {
     for mut text in &mut query {
         if let Some(fps) = diagnostics.get(FrameTimeDiagnosticsPlugin::FPS) {
             if let Some(value) = fps.smoothed() {

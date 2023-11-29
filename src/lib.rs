@@ -103,6 +103,10 @@
 
 #[cfg(feature = "ansi_term")]
 pub mod ansi_term;
+#[cfg(feature = "bevy")]
+pub mod bevy;
+#[cfg(feature = "colored")]
+pub mod colored;
 #[cfg(feature = "crossterm")]
 pub mod crossterm;
 #[cfg(feature = "cursive")]
@@ -113,10 +117,6 @@ pub mod genpdf;
 pub mod syntect;
 #[cfg(feature = "termion")]
 pub mod termion;
-#[cfg(feature = "bevy")]
-pub mod bevy;
-#[cfg(feature = "colored")]
-pub mod colored;
 /// A borrowed string with an optional style annotation.
 ///
 /// # Example

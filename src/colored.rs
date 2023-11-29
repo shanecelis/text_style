@@ -1,8 +1,9 @@
-use std::io;
 use colored::{self, Colorize};
+use std::io;
 
-use crate::{Color, Effects, Style, StyledStr, StyledString, AnsiMode, AnsiColor};
+use crate::{AnsiColor, AnsiMode, Color, Effects, Style, StyledStr, StyledString};
 
+// We need access to the ColoredString but it's not public.
 struct PubColoredString {
     input: String,
     fgcolor: Option<Color>,
@@ -12,26 +13,27 @@ struct PubColoredString {
 
 impl From<colored::Color> for Color {
     fn from(color: colored::Color) -> Color {
-        use ::colored::Color::*;
         use crate::AnsiColor;
         use crate::AnsiMode::*;
+        use ::colored::Color::*;
+        #[rustfmt::skip]
         match color {
-            Black => Color::Ansi { color: AnsiColor::Black, mode: Dark },
-            Red => Color::Ansi { color: AnsiColor::Red, mode: Dark },
-            Green => Color::Ansi { color: AnsiColor::Green, mode: Dark },
-            Yellow => Color::Ansi { color: AnsiColor::Yellow, mode: Dark },
-            Blue => Color::Ansi { color: AnsiColor::Blue, mode: Dark },
-            Magenta => Color::Ansi { color: AnsiColor::Magenta, mode: Dark },
-            Cyan => Color::Ansi { color: AnsiColor::Cyan, mode: Dark },
-            White => Color::Ansi { color: AnsiColor::White, mode: Dark },
-            BrightBlack => Color::Ansi { color: AnsiColor::Black, mode: Light },
-            BrightRed => Color::Ansi { color: AnsiColor::Red, mode: Light },
-            BrightGreen => Color::Ansi { color: AnsiColor::Green, mode: Light },
-            BrightYellow => Color::Ansi { color: AnsiColor::Yellow, mode: Light },
-            BrightBlue => Color::Ansi { color: AnsiColor::Blue, mode: Light },
+            Black         => Color::Ansi { color: AnsiColor::Black, mode: Dark },
+            Red           => Color::Ansi { color: AnsiColor::Red, mode: Dark },
+            Green         => Color::Ansi { color: AnsiColor::Green, mode: Dark },
+            Yellow        => Color::Ansi { color: AnsiColor::Yellow, mode: Dark },
+            Blue          => Color::Ansi { color: AnsiColor::Blue, mode: Dark },
+            Magenta       => Color::Ansi { color: AnsiColor::Magenta, mode: Dark },
+            Cyan          => Color::Ansi { color: AnsiColor::Cyan, mode: Dark },
+            White         => Color::Ansi { color: AnsiColor::White, mode: Dark },
+            BrightBlack   => Color::Ansi { color: AnsiColor::Black, mode: Light },
+            BrightRed     => Color::Ansi { color: AnsiColor::Red, mode: Light },
+            BrightGreen   => Color::Ansi { color: AnsiColor::Green, mode: Light },
+            BrightYellow  => Color::Ansi { color: AnsiColor::Yellow, mode: Light },
+            BrightBlue    => Color::Ansi { color: AnsiColor::Blue, mode: Light },
             BrightMagenta => Color::Ansi { color: AnsiColor::Magenta, mode: Light },
-            BrightCyan => Color::Ansi { color: AnsiColor::Cyan, mode: Light },
-            BrightWhite => Color::Ansi { color: AnsiColor::White, mode: Light },
+            BrightCyan    => Color::Ansi { color: AnsiColor::Cyan, mode: Light },
+            BrightWhite   => Color::Ansi { color: AnsiColor::White, mode: Light },
             TrueColor { r, g, b } => Color::Rgb { r, g, b },
         }
     }
@@ -50,7 +52,7 @@ fn get_ansi(color: AnsiColor, mode: AnsiMode) -> colored::Color {
     use ::colored::Color::*;
     use AnsiColor;
     use AnsiMode::*;
-
+    #[rustfmt::skip]
     match (mode, color) {
         (Dark, AnsiColor::Black)    => Black,
         (Dark, AnsiColor::Red)      => Red,
@@ -118,7 +120,7 @@ impl From<colored::ColoredString> for StyledString {
                 fg: pstyle.fgcolor.map(Into::into),
                 bg: pstyle.bgcolor.map(Into::into),
                 effects: pstyle.style.into(),
-            })
+            }),
         }
     }
 }
@@ -173,7 +175,8 @@ where
     for s in iter
         .into_iter()
         .map(Into::into)
-        .map(colored::ColoredString::from) {
+        .map(colored::ColoredString::from)
+    {
         write!(w, "{}", s)?;
     }
     Ok(())
