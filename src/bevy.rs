@@ -1,8 +1,57 @@
+// SPDX-FileCopyrightText: 2023 Shane Celis <shane.celis@gmail.com>
+// SPDX-License-Identifier: Apache-2.0 or MIT
+
+//! Conversion methods for [`bevy`][]’s text style types.
+//!
+//! *Requires the `bevy` feature.*
+//!
+//! This module implements these conversions:
+//! - [`Color`][] to [`bevy::prelude::Color`][]
+//! - [`Style`][] to [`genpdf::style::Style`][]
+//! - [`StyledStr`][] and [`StyledString`][] to [`bevy::prelude::TextBundle`][] and
+//!
+//! # Example
+//!
+//! Adding a string to a paragraph:
+//!
+//! ```
+//! let text = text_style::StyledStr::plain("test").bold();
+//! commands
+//!     .spawn(NodeBundle..default())
+//!     .with_children(|parent| {
+//!         text_style::bevy::render(
+//!             parent,
+//!             Some(TextStyle {
+//!                 font_size: 50.0,
+//!                 ..default()
+//!             }),
+//!             text
+//!         );
+//! ```
 use crate::{AnsiColor, AnsiMode, Color, Style, StyledStr, StyledString};
 use bevy::{
     self,
     prelude::{Color as bevy_Color, *},
 };
+
+#[derive(Default)]
+pub struct TextStyleParams {
+    pub text_style: TextStyle,
+    // plain: Option<Handle<Font>>,
+    pub bold: Option<Handle<Font>>,
+    pub italic: Option<Handle<Font>>,
+    // underline
+    // strikethrough
+}
+
+impl From<TextStyle> for TextStyleParams {
+    fn from(text_style: TextStyle) -> TextStyleParams {
+        TextStyleParams {
+            text_style: text_style,
+            ..default()
+        }
+    }
+}
 
 impl From<Color> for bevy_Color {
     fn from(c: Color) -> bevy_Color {
@@ -88,6 +137,24 @@ impl<'a> From<StyledStr<'a>> for TextBundle {
     }
 }
 
+/// Renders a styled string to the given output using `bevy`.
+///
+/// # Example
+///
+/// ```
+/// let text = text_style::StyledStr::plain("test").bold();
+/// commands
+///     .spawn(NodeBundle..default())
+///     .with_children(|parent| {
+///         text_style::bevy::render(
+///             parent,
+///             Some(TextStyle {
+///                 font_size: 50.0,
+///                 ..default()
+///             }),
+///             text
+///         );
+/// ```
 pub fn render<'a>(
     parent: &mut ChildBuilder<'_, '_, '_>,
     o: Option<TextStyle>,
@@ -97,6 +164,31 @@ pub fn render<'a>(
     parent.spawn(bundle);
 }
 
+/// Renders multiple styled string to the given output using `bevy`.
+///
+/// # Example
+///
+/// ```
+/// commands
+///     .spawn(NodeBundle..default())
+///     .with_children(|parent| {
+///         text_style::bevy::render(
+///             parent,
+///             Some(TextStyle {
+///                 font_size: 50.0,
+///                 ..default()
+///             }),
+///             [
+///                 StyledStr::plain("ansi red light").with(AnsiColor::Red.light()),
+///                 " ".into(),
+///                 StyledStr::plain("red").with(text_style::Color::Rgb { r: 255, g: 0, b: 0 }),
+///                 " ".into(),
+///                 StyledStr::plain("on green dark").on(AnsiColor::Green.dark()),
+///                 " ".into(),
+///                 StyledStr::plain("on green").on(text_style::Color::Rgb { r: 0, g: 255, b: 0 }),
+///             ],
+///         );
+/// ```
 pub fn render_iter<'a, I, Iter, S>(
     parent: &mut ChildBuilder<'_, '_, '_>,
     o: Option<TextStyle>,
