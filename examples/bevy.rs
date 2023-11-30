@@ -6,7 +6,7 @@ use bevy::{
     diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin},
     prelude::*,
 };
-use text_style::{self, AnsiColor, StyledStr};
+use text_style::{self, AnsiColor, StyledStr, bevy::TextStyleParams};
 
 fn main() {
     App::new()
@@ -74,10 +74,14 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         FpsText,
     ));
 
-    let style = TextStyle {
-        font: asset_server.load("fonts/FiraSans-Bold.ttf"),
-        font_size: 60.0,
-        color: Color::WHITE,
+    let style_params = TextStyleParams {
+        bold: Some(asset_server.load("fonts/FiraMono-Bold.ttf")),
+        italic: None,
+        text_style: TextStyle {
+            font: asset_server.load("fonts/FiraMono-Medium.ttf"),
+            font_size: 60.0,
+            color: Color::WHITE,
+        }
     };
     commands
         .spawn(NodeBundle {
@@ -92,12 +96,9 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         .with_children(|parent| {
             text_style::bevy::render_iter(
                 parent,
-                Some(TextStyle {
-                    font_size: 50.0,
-                    ..default()
-                }),
+                &style_params,
                 [
-                    StyledStr::plain("ansi red light").with(AnsiColor::Red.light()),
+                    StyledStr::plain("ansi red light").bold().with(AnsiColor::Red.light()),
                     " ".into(),
                     StyledStr::plain("red").with(text_style::Color::Rgb { r: 255, g: 0, b: 0 }),
                     " ".into(),
@@ -106,20 +107,6 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                     StyledStr::plain("on green").on(text_style::Color::Rgb { r: 0, g: 255, b: 0 }),
                 ],
             );
-
-            // let a : [&dyn TextRender; 8]  = [
-            //     &"fg".color(DynColors::Rgb(255, 0, 0)),
-            //     &"fg".red(),
-            //     &" ",
-            //     &"bg".on_color(DynColors::Rgb(0, 255, 0)),
-            //     &"bg".on_green(),
-            //     &"  ",
-            //     &"fgbg".color(DynColors::Rgb(0,0,255)).on_color(DynColors::Rgb(255, 255, 255)),
-            //     &"fgbg".blue().on_white(),
-            // ];
-            // for c in do_renders(a.into_iter(), style) {
-            //     parent.spawn(c);
-            // }
         });
 }
 
