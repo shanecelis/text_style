@@ -72,14 +72,13 @@ impl From<Color> for bevy_Color {
 }
 
 fn use_params(params: &TextStyleParams, style: &Style) -> TextStyle {
-    let font: Option<Handle<Font>>
-        = if style.effects.is_bold {
-            params.bold.clone()
-        } else if style.effects.is_italic {
-            params.italic.clone()
-        } else {
-            None
-        };
+    let font: Option<Handle<Font>> = if style.effects.is_bold {
+        params.bold.clone()
+    } else if style.effects.is_italic {
+        params.italic.clone()
+    } else {
+        None
+    };
     TextStyle {
         font: font.unwrap_or(params.text_style.font.clone()),
         ..params.text_style.clone()

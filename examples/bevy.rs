@@ -6,7 +6,7 @@ use bevy::{
     diagnostic::{DiagnosticsStore, FrameTimeDiagnosticsPlugin},
     prelude::*,
 };
-use text_style::{self, AnsiColor, StyledStr, bevy::TextStyleParams};
+use text_style::{self, bevy::TextStyleParams, AnsiColor, StyledStr};
 
 fn main() {
     App::new()
@@ -81,7 +81,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             font: asset_server.load("fonts/FiraMono-Medium.ttf"),
             font_size: 60.0,
             color: Color::WHITE,
-        }
+        },
     };
     commands
         .spawn(NodeBundle {
@@ -98,7 +98,9 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                 parent,
                 &style_params,
                 [
-                    StyledStr::plain("ansi red light").bold().with(AnsiColor::Red.light()),
+                    StyledStr::plain("ansi red light")
+                        .bold()
+                        .with(AnsiColor::Red.light()),
                     " ".into(),
                     StyledStr::plain("red").with(text_style::Color::Rgb { r: 255, g: 0, b: 0 }),
                     " ".into(),
