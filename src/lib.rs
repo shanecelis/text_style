@@ -415,7 +415,7 @@ impl StyledString {
 impl<'a, 'b> From<&'b StyledStr<'a>> for StyledStr<'a> {
     fn from(s: &'b StyledStr<'a>) -> StyledStr<'a> {
         StyledStr {
-            s: &s.s,
+            s: s.s,
             style: s.style,
         }
     }
