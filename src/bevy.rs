@@ -15,18 +15,22 @@
 //! Adding a string to a paragraph:
 //!
 //! ```
-//! let text = text_style::StyledStr::plain("test").bold();
-//! commands
-//!     .spawn(NodeBundle..default())
-//!     .with_children(|parent| {
-//!         text_style::bevy::render(
-//!             parent,
-//!             Some(TextStyle {
-//!                 font_size: 50.0,
-//!                 ..default()
-//!             }),
-//!             text
-//!         );
+//! # use bevy::prelude::*;
+//! fn setup(mut commands: Commands) {
+//!    let text = text_style::StyledStr::plain("test").bold();
+//!    commands
+//!        .spawn(NodeBundle::default())
+//!        .with_children(|parent| {
+//!            text_style::bevy::render(
+//!                parent,
+//!                &(TextStyle {
+//!                    font_size: 50.0,
+//!                    ..default()
+//!                }.into()),
+//!                text
+//!            );
+//!        });
+//! }
 //! ```
 use crate::{AnsiColor, AnsiMode, Color, Style, StyledStr, StyledString};
 use bevy::{
@@ -34,11 +38,16 @@ use bevy::{
     prelude::{Color as bevy_Color, *},
 };
 
-#[derive(Default)]
+/// Provide text style parameters that include bold and italic font's if
+/// available.
+#[derive(Debug, Default, Clone)]
 pub struct TextStyleParams {
+    /// This is bevy's typical font style. Its font can be considered
+    /// text_style's plain font.
     pub text_style: TextStyle,
-    // plain: Option<Handle<Font>>,
+    /// A bold font if available.
     pub bold: Option<Handle<Font>>,
+    /// An italic font if available.
     pub italic: Option<Handle<Font>>,
     // underline
     // strikethrough
@@ -157,26 +166,29 @@ impl<'a> From<StyledStr<'a>> for TextBundle {
 /// # Example
 ///
 /// ```
-/// let text = text_style::StyledStr::plain("test").bold();
-/// commands
-///     .spawn(NodeBundle..default())
-///     .with_children(|parent| {
-///         text_style::bevy::render(
-///             parent,
-///             &TextStyle {
-///                 font_size: 50.0,
-///                 ..default()
-///             }.into(),
-///             text
-///         );
+/// # use bevy::prelude::*;
+/// fn setup(mut commands: Commands) {
+///     let text = text_style::StyledStr::plain("test").bold();
+///     commands
+///         .spawn(NodeBundle::default())
+///         .with_children(|parent| {
+///             text_style::bevy::render(
+///                 parent,
+///                 &TextStyle {
+///                     font_size: 50.0,
+///                     ..default()
+///                 }.into(),
+///                 text
+///             );
+///         });
+/// }
 /// ```
 pub fn render<'a>(
     parent: &mut ChildBuilder<'_, '_, '_>,
     o: &TextStyleParams,
     s: impl Into<StyledStr<'a>>,
 ) {
-    let mut bundle = with_style_str(s.into(), o);
-    parent.spawn(bundle);
+    parent.spawn(with_style_str(s.into(), o));
 }
 
 /// Renders multiple styled string to the given output using `bevy`.
@@ -184,25 +196,30 @@ pub fn render<'a>(
 /// # Example
 ///
 /// ```
-/// commands
-///     .spawn(NodeBundle..default())
-///     .with_children(|parent| {
-///         text_style::bevy::render(
-///             parent,
-///             &TextStyle {
-///                 font_size: 50.0,
-///                 ..default()
-///             }.into(),
-///             [
-///                 StyledStr::plain("ansi red light").with(AnsiColor::Red.light()),
-///                 " ".into(),
-///                 StyledStr::plain("red").with(text_style::Color::Rgb { r: 255, g: 0, b: 0 }),
-///                 " ".into(),
-///                 StyledStr::plain("on green dark").on(AnsiColor::Green.dark()),
-///                 " ".into(),
-///                 StyledStr::plain("on green").on(text_style::Color::Rgb { r: 0, g: 255, b: 0 }),
-///             ],
-///         );
+/// # use ::bevy::prelude::*;
+/// # use text_style::*;
+/// fn setup(mut commands: Commands) {
+///     commands
+///         .spawn(NodeBundle::default())
+///         .with_children(|parent| {
+///             text_style::bevy::render_iter(
+///                 parent,
+///                 &(TextStyle {
+///                     font_size: 50.0,
+///                     ..default()
+///                 }.into()),
+///                 [
+///                     StyledStr::plain("ansi red light").with(AnsiColor::Red.light()),
+///                     " ".into(),
+///                     StyledStr::plain("red").with(text_style::Color::Rgb { r: 255, g: 0, b: 0 }),
+///                     " ".into(),
+///                     StyledStr::plain("on green dark").on(AnsiColor::Green.dark()),
+///                     " ".into(),
+///                     StyledStr::plain("on green").on(text_style::Color::Rgb { r: 0, g: 255, b: 0 }),
+///                 ],
+///             );
+///          });
+/// }
 /// ```
 pub fn render_iter<'a, I, Iter, S>(
     parent: &mut ChildBuilder<'_, '_, '_>,

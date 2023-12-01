@@ -1,3 +1,47 @@
+// SPDX-FileCopyrightText: 2023 Shane Celis <shane.celis@gmail.com>
+// SPDX-License-Identifier: Apache-2.0 or MIT
+
+//! Conversion methods for [`colored`][]’s text style types.
+//!
+//! *Requires the `colored` feature.*
+//!
+//! This module implements these conversions:
+//! - [`Color`][] to and from [`colored::Color`][]
+//! - [`Style`][] to and from [`colored::Effects`][]
+//! - [`StyledStr`][] and [`StyledString`][] to and from [`colored::ColoredString`][]
+//!
+//! Alternatively, you can use the [`render`][] function to render a single string and the
+//! [`render_iter`][] function to render an iterator over strings.
+//!
+//! # Examples
+//!
+//! Rendering a single string:
+//!
+//! ```
+//! let s = text_style::StyledStr::plain("test").bold();
+//! text_style::colored::render(std::io::stdout(), s)
+//!     .expect("Failed to render string");
+//! ```
+//!
+//! Rendering multiple strings:
+//!
+//! ```
+//! let v = vec![
+//!     text_style::StyledStr::plain("test").bold(),
+//!     text_style::StyledStr::plain(" "),
+//!     text_style::StyledStr::plain("test2").italic(),
+//! ];
+//! text_style::colored::render_iter(std::io::stdout(), v.iter())
+//!     .expect("Failed to render string");
+//! ```
+//! [`Display`]: https://doc.rust-lang.org/std/fmt/trait.Display.html
+//! [`colored`]: https://docs.rs/colored
+//! [`ColoredString`]: https://docs.rs/colored/latest/colored/struct.ColoredString.html
+//! [`colored::Color`]: https://docs.rs/colored/latest/colored/enum.Color.html
+//! [`StyledStr`]: ../struct.StyledStr.html
+//! [`StyledString`]: ../struct.StyledString.html
+//! [`render`]: fn.render.html
+//! [`render_iter`]: fn.render_iter.html
 use colored::{self, Colorize};
 use std::io;
 
@@ -151,10 +195,32 @@ impl<'a> From<StyledStr<'a>> for colored::ColoredString {
     }
 }
 
+/// Renders a styled string to the given output using `colored`.
+///
+/// # Example
+///
+/// ```
+/// let s = text_style::StyledStr::plain("test").bold();
+/// text_style::colored::render(std::io::stdout(), s)
+///     .expect("Failed to render string");
+/// ```
 pub fn render<'a>(mut w: impl io::Write, s: impl Into<StyledStr<'a>>) -> io::Result<()> {
     write!(w, "{}", colored::ColoredString::from(s.into()))
 }
 
+/// Renders multiple styled string to the given output using `colored`.
+///
+/// # Example
+///
+/// ```
+/// let v = vec![
+///     text_style::StyledStr::plain("test").bold(),
+///     text_style::StyledStr::plain(" "),
+///     text_style::StyledStr::plain("test2").italic(),
+/// ];
+/// text_style::colored::render_iter(std::io::stdout(), v.iter())
+///     .expect("Failed to render string");
+/// ```
 pub fn render_iter<'a, I, Iter, S, W>(mut w: W, iter: I) -> io::Result<()>
 where
     I: IntoIterator<Item = S, IntoIter = Iter>,

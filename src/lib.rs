@@ -19,6 +19,8 @@
 //! - [`genpdf`][]: convert to [`genpdf::style::StyledStr`][] and [`genpdf::style::StyledString`][]
 //! - [`syntect`][]: convert from [`syntect::highlighting::Style`][]
 //! - [`termion`][]: convert to a termion escape string
+//! - [`colored`][]: convert to a [`colored::ColoredString`][]
+//! - [`bevy`][]: convert to a bevy [`bevy::prelude::TextBundle`][]
 //!
 //! # Background
 //!
@@ -92,12 +94,16 @@
 //! [`genpdf`]: ./genpdf/index.html
 //! [`syntect`]: ./syntect/index.html
 //! [`termion`]: ./termion/index.html
+//! [`bevy`]: ./bevy/index.html
+//! [`colored`]: ./colored/index.html
 //! [`ansi_term::ANSIString`]: https://docs.rs/ansi_term/latest/ansi_term/type.ANSIString.html
 //! [`crossterm::style::StyledContent`]: https://docs.rs/crossterm/latest/crossterm/style/struct.StyledContent.html
 //! [`cursive::utils::markup::StyledString`]: https://docs.rs/cursive/latest/cursive/utils/markup/type.StyledString.html
 //! [`genpdf::style::StyledStr`]: https://docs.rs/genpdf/latest/genpdf/style/struct.StyledStr.html
 //! [`genpdf::style::StyledString`]: https://docs.rs/genpdf/latest/genpdf/style/struct.StyledString.html
 //! [`syntect::highlighting::Style`]: https://docs.rs/syntect/latest/syntect/highlighting/struct.Style.html
+//! [`bevy::prelude::TextBundle`]: https://docs.rs/bevy/latest/bevy/prelude/struct.TextBundle.html
+//! [`colored::ColoredString`]: https://docs.rs/colored/latest/colored/struct.ColoredString.html
 
 #![warn(missing_docs, rust_2018_idioms)]
 

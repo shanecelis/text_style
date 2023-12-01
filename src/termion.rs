@@ -7,7 +7,7 @@
 //!
 //! Termion does not use store the text format in generic data types together with the formatted
 //! texts.  Instead, if provides separate commands for all formatting options.  These commands
-//! produce ANSI escape sequencens that can be printed to stdout.
+//! produce ANSI escape sequences that can be printed to stdout.
 //!
 //! This module defines the [`Termion`][] trait that is implemented for [`StyledStr`][] and
 //! [`StyledString`][].  Its [`termion`][`Termion::termion`] method produces an instance of the
