@@ -163,10 +163,10 @@ impl<'a> From<StyledStr<'a>> for TextBundle {
 ///     .with_children(|parent| {
 ///         text_style::bevy::render(
 ///             parent,
-///             Some(TextStyle {
+///             &TextStyle {
 ///                 font_size: 50.0,
 ///                 ..default()
-///             }),
+///             }.into(),
 ///             text
 ///         );
 /// ```
@@ -189,10 +189,10 @@ pub fn render<'a>(
 ///     .with_children(|parent| {
 ///         text_style::bevy::render(
 ///             parent,
-///             Some(TextStyle {
+///             &TextStyle {
 ///                 font_size: 50.0,
 ///                 ..default()
-///             }),
+///             }.into(),
 ///             [
 ///                 StyledStr::plain("ansi red light").with(AnsiColor::Red.light()),
 ///                 " ".into(),

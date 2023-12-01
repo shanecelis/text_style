@@ -3,11 +3,12 @@ use std::io;
 
 use crate::{AnsiColor, AnsiMode, Color, Effects, Style, StyledStr, StyledString};
 
-// We need access to the ColoredString but it's not public.
+// We need access to the ColoredString but it's not public, so we stoop to
+// transmute.
 struct PubColoredString {
     input: String,
-    fgcolor: Option<Color>,
-    bgcolor: Option<Color>,
+    fgcolor: Option<colored::Color>,
+    bgcolor: Option<colored::Color>,
     style: colored::Style,
 }
 
