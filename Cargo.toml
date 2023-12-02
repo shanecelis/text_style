@@ -68,3 +68,13 @@ features = ["assets", "dump-load", "parsing", "regex-onig"]
 
 [package.metadata.docs.rs]
 all-features = true
+
+[[example]]
+name = "bevy"
+path = "examples/bevy.rs"
+required-features = [ "bevy" ]
+
+[[example]]
+name = "syntect"
+path = "examples/syntect.rs"
+required-features = [ "syntect" ]

@@ -42,6 +42,7 @@
 //!     .with(AnsiColor::Red.light())
 //!     .on(AnsiColor::Green.dark())
 //!     .bold();
+//! # #[cfg(feature = "ansi_term")]
 //! text_style::ansi_term::render(std::io::stdout(), s)
 //!     .expect("Could not render line");
 //! ```
@@ -60,6 +61,7 @@
 //! let s = "pub struct Wow { hi: u64 }\nfn blah() -> u64 {}";
 //! for line in util::LinesWithEndings::from(s) {
 //!     let ranges: Vec<(highlighting::Style, &str)> = h.highlight(line, &ps);
+//!     # #[cfg(feature = "ansi_term")]
 //!     text_style::ansi_term::render_iter(std::io::stdout(), ranges.iter())
 //!         .expect("Could not render line");
 //! }
@@ -76,8 +78,11 @@
 //! let s = text_style::StyledStr::plain("test").bold();
 //!
 //! let mut w = std::io::stdout();
+//! # #[cfg(feature = "ansi_term")]
 //! text_style::ansi_term::render(&mut w, &s).expect("Rendering failed");
+//! # #[cfg(feature = "crossterm")]
 //! text_style::crossterm::render(&mut w, &s).expect("Rendering failed");
+//! # #[cfg(feature = "termion")]
 //! text_style::termion::render(&mut w, &s).expect("Rendering failed");
 //! ```
 //!

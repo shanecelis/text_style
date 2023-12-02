@@ -46,11 +46,17 @@ mod bold {
     }
 
     test_cases! { [input(); OUTPUT]
+        #[cfg(feature = "ansi_term")]
         ansi_term,
+        #[cfg(feature = "crossterm")]
         crossterm,
+        #[cfg(feature = "termion")]
         termion,
+        #[cfg(feature = "colored")]
+        colored,
     }
 
+    #[cfg(feature = "cursive")]
     #[test]
     fn cursive() {
         use cursive::utils::markup;
@@ -60,6 +66,7 @@ mod bold {
         assert_eq!(output, markup::StyledString::from(input));
     }
 
+    #[cfg(feature = "genpdf")]
     #[test]
     fn genpdf() {
         use genpdf::style;
@@ -79,11 +86,17 @@ mod italic {
     }
 
     test_cases! { [input(); OUTPUT]
+        #[cfg(feature = "ansi_term")]
         ansi_term,
+        #[cfg(feature = "crossterm")]
         crossterm,
+        #[cfg(feature = "termion")]
         termion,
+        #[cfg(feature = "colored")]
+        colored,
     }
 
+    #[cfg(feature = "cursive")]
     #[test]
     fn cursive() {
         use cursive::utils::markup;
@@ -93,6 +106,7 @@ mod italic {
         assert_eq!(output, markup::StyledString::from(input));
     }
 
+    #[cfg(feature = "genpdf")]
     #[test]
     fn genpdf() {
         use genpdf::style;
@@ -112,11 +126,17 @@ mod underline {
     }
 
     test_cases! { [input(); OUTPUT]
+        #[cfg(feature = "ansi_term")]
         ansi_term,
+        #[cfg(feature = "crossterm")]
         crossterm,
+        #[cfg(feature = "termion")]
         termion,
+        #[cfg(feature = "colored")]
+        colored,
     }
 
+    #[cfg(feature = "cursive")]
     #[test]
     fn cursive() {
         use cursive::utils::markup;
@@ -135,11 +155,17 @@ mod strikethrough {
     }
 
     test_cases! { [input(); OUTPUT]
+        #[cfg(feature = "ansi_term")]
         ansi_term,
+        #[cfg(feature = "crossterm")]
         crossterm,
+        #[cfg(feature = "termion")]
         termion,
+        #[cfg(feature = "colored")]
+        colored,
     }
 
+    #[cfg(feature = "cursive")]
     #[test]
     fn cursive() {
         use cursive::utils::markup;
@@ -165,11 +191,17 @@ mod fg {
     }
 
     test_cases! { [input(); OUTPUT]
+        #[cfg(feature = "ansi_term")]
         ansi_term,
+        #[cfg(feature = "crossterm")]
         crossterm,
+        #[cfg(feature = "termion")]
         termion,
+        #[cfg(feature = "colored")]
+        colored,
     }
 
+    #[cfg(feature = "cursive")]
     #[test]
     fn cursive() {
         use cursive::{theme, utils::markup};
@@ -185,6 +217,7 @@ mod fg {
         assert_eq!(output, markup::StyledString::from(input));
     }
 
+    #[cfg(feature = "genpdf")]
     #[test]
     fn genpdf() {
         use genpdf::style;
@@ -211,11 +244,17 @@ mod bg {
     }
 
     test_cases! { [input(); OUTPUT]
+        #[cfg(feature = "ansi_term")]
         ansi_term,
+        #[cfg(feature = "crossterm")]
         crossterm,
+        #[cfg(feature = "termion")]
         termion,
+        #[cfg(feature = "colored")]
+        colored,
     }
 
+    #[cfg(feature = "cursive")]
     #[test]
     fn cursive() {
         use cursive::{theme, utils::markup};
