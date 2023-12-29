@@ -135,9 +135,15 @@ impl From<StyledString> for TextBundle {
     }
 }
 
-fn with_style_str<'a>(s: StyledStr<'a>, text_style_params: &TextStyleParams) -> TextBundle {
+// I originally had this function too:
+//
+// fn with_style_str<'a>(s: StyledStr<'a>, text_style_params: &TextStyleParams) -> TextBundle;
+//
+// but TextBundle requires a String, so Into<StyledString> seemed more explicit.
+fn with_style_string(s: impl Into<StyledString>, text_style_params: &TextStyleParams) -> TextBundle {
+    let s = s.into();
     let bundle = TextBundle::from_section(
-        s.s.to_owned(),
+        s.s,
         s.style
             .and_then(|style| {
                 style.fg.map(|fg| TextStyle {
@@ -156,7 +162,7 @@ fn with_style_str<'a>(s: StyledStr<'a>, text_style_params: &TextStyleParams) -> 
 
 impl<'a> From<StyledStr<'a>> for TextBundle {
     fn from(s: StyledStr<'a>) -> TextBundle {
-        with_style_str(s, &TextStyle::default().into())
+        with_style_string(s, &TextStyle::default().into())
     }
 }
 
@@ -185,9 +191,9 @@ impl<'a> From<StyledStr<'a>> for TextBundle {
 pub fn render<'a>(
     parent: &mut ChildBuilder<'_, '_, '_>,
     o: &TextStyleParams,
-    s: impl Into<StyledStr<'a>>,
+    s: impl Into<StyledString>,
 ) {
-    parent.spawn(with_style_str(s.into(), o));
+    parent.spawn(with_style_string(s.into(), o));
 }
 
 /// Renders multiple styled string to the given output using `bevy`.
@@ -227,7 +233,7 @@ pub fn render_iter<'a, I, Iter, S>(
 ) where
     I: IntoIterator<Item = S, IntoIter = Iter>,
     Iter: Iterator<Item = S>,
-    S: Into<StyledStr<'a>>,
+    S: Into<StyledString>,
 {
     iter.into_iter().for_each(|b| render(parent, o, b));
 }
