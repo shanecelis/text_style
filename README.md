@@ -33,6 +33,8 @@ This crate has the following features:
 - `cursive`: convert to [`cursive`](https://lib.rs/cursive) types
 - `syntect`: convert from [`syntect`](https://lib.rs/syntect) types
 - `termion`: convert to [`termion`](https://lib.rs/termion) types
+- `colored`: convert to and from [`colored`](https://crates.io/crates/colored) types
+- `bevy`: convert to [`bevy`](https://bevyengine.org) [TextBundle](https://docs.rs/bevy/latest/bevy/prelude/struct.TextBundle.html)s
 
 All features are disabled per default.
 
