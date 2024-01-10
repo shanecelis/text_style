@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: text-style-rs
+Upstream-Contact: Robin Krahl <robin.krahl@ireas.org>
+Source: https://sr.ht/~ireas/text-style-rs/
+
+Files: assets/fonts/*.ttf
+Copyright: 2012-2014, The Mozilla Foundation and Telefonica S.A.
+License: OFL-1.1

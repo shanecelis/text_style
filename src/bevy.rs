@@ -140,7 +140,10 @@ impl From<StyledString> for TextBundle {
 // fn with_style_str<'a>(s: StyledStr<'a>, text_style_params: &TextStyleParams) -> TextBundle;
 //
 // but TextBundle requires a String, so Into<StyledString> seemed more explicit.
-fn with_style_string(s: impl Into<StyledString>, text_style_params: &TextStyleParams) -> TextBundle {
+fn with_style_string(
+    s: impl Into<StyledString>,
+    text_style_params: &TextStyleParams,
+) -> TextBundle {
     let s = s.into();
     let bundle = TextBundle::from_section(
         s.s,

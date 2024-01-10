@@ -240,17 +240,23 @@ where
 
 #[cfg(test)]
 mod tests {
-    use ::colored::{Colorize, ColoredString};
-    use crate::*;
-    use crate::Color::*;
     use crate::AnsiColor::*;
     use crate::AnsiMode::*;
+    use crate::Color::*;
+    use crate::*;
+    use ::colored::{ColoredString, Colorize};
 
     #[test]
     fn test_from() {
         let s: StyledString = "red".red().into();
         assert_eq!(s.s, "red");
-        assert_eq!(s.style.unwrap().fg, Some(Ansi { color: Red, mode: Dark }));
+        assert_eq!(
+            s.style.unwrap().fg,
+            Some(Ansi {
+                color: Red,
+                mode: Dark
+            })
+        );
         assert_eq!(s.style.unwrap().bg, None);
     }
 
@@ -261,7 +267,13 @@ mod tests {
         let u: StyledString = t.into();
 
         assert_eq!(u.s, "red");
-        assert_eq!(u.style.unwrap().fg, Some(Ansi { color: Red, mode: Dark }));
+        assert_eq!(
+            u.style.unwrap().fg,
+            Some(Ansi {
+                color: Red,
+                mode: Dark
+            })
+        );
         assert_eq!(u.style.unwrap().bg, None);
     }
 }

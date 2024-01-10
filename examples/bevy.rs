@@ -1,3 +1,6 @@
+// Copyright (C) 2024 Shane Celis <shane.celis@gmail.com>
+// SPDX-License-Identifier: CC0-1.0
+
 //!
 //! It displays the current FPS in the top left corner, as well as text that changes color
 //! in the bottom right. For text within a scene, please see the text2d example.
