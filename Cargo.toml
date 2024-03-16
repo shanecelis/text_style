@@ -21,7 +21,7 @@ version = "0.12"
 optional = true
 
 [dependencies.crossterm]
-version = "0.20"
+version = "0.26"
 optional = true
 
 [dependencies.cursive]

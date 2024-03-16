@@ -269,4 +269,12 @@ mod bg {
         );
         assert_eq!(output, markup::StyledString::from(input));
     }
+
+    #[cfg(feature = "crossterm")]
+    #[test]
+    fn test_from() {
+        use text_style::{Color, AnsiColor::*, AnsiMode::*};
+        let c: crossterm::style::Color = Color::Ansi { color: Black, mode: Dark }.into();
+        assert_eq!(c, crossterm::style::Color::Black);
+    }
 }

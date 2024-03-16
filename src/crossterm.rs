@@ -114,6 +114,7 @@ impl From<Style> for style::ContentStyle {
         style::ContentStyle {
             foreground_color: style.fg.map(Into::into),
             background_color: style.bg.map(Into::into),
+            underline_color: None,
             attributes: style.effects.into(),
         }
     }
