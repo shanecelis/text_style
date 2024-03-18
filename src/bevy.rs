@@ -192,7 +192,7 @@ impl<'a> From<StyledStr<'a>> for TextBundle {
 /// }
 /// ```
 pub fn render<'a>(
-    parent: &mut ChildBuilder<'_, '_, '_>,
+    parent: &mut ChildBuilder<'_>,
     o: &TextStyleParams,
     s: impl Into<StyledString>,
 ) {
@@ -230,7 +230,7 @@ pub fn render<'a>(
 /// }
 /// ```
 pub fn render_iter<'a, I, Iter, S>(
-    parent: &mut ChildBuilder<'_, '_, '_>,
+    parent: &mut ChildBuilder<'_>,
     o: &TextStyleParams,
     iter: I,
 ) where
