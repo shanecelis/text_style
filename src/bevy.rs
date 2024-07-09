@@ -66,7 +66,7 @@ impl From<Color> for bevy_Color {
     fn from(c: Color) -> bevy_Color {
         match c {
             Color::Ansi { color, mode } => get_rgb_color(color, mode),
-            Color::Rgb { r, g, b } => bevy_Color::rgb_u8(r, g, b),
+            Color::Rgb { r, g, b } => bevy_Color::srgb_u8(r, g, b),
         }
     }
 }
@@ -107,7 +107,7 @@ fn get_rgb_color(color: AnsiColor, mode: AnsiMode) -> bevy_Color {
         (Light, Cyan) => (85, 255, 255),
         (Light, White) => (255, 255, 255),
     };
-    bevy_Color::rgb_u8(r, g, b)
+    bevy_Color::srgb_u8(r, g, b)
 }
 
 fn with_style(s: StyledString, text_style_params: &TextStyleParams) -> TextBundle {
